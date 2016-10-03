@@ -45,7 +45,7 @@ class MongoDeleteTest extends MongoTestCase
             'connection'   => 1,
             'propertyName' => 'foo',
             'collection'   => 'app_news',
-            'criteria'     => '{"id": {{ request.uriFragment("id") }}}',
+            'criteria'     => '{"id": {{ request.uriFragment("id")|integer }} }',
         ]);
 
         $action   = $this->getActionFactory()->factory(MongoDelete::class);
