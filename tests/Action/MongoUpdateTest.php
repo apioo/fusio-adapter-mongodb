@@ -46,7 +46,7 @@ class MongoUpdateTest extends MongoTestCase
             'connection'   => 1,
             'propertyName' => 'foo',
             'collection'   => 'app_news',
-            'criteria'     => '{"id": {{ request.uriFragment("id") }}}',
+            'criteria'     => '{ "$id": {{ request.uriFragment("id")|integer }} }',
             'document'     => '{{ request.body|json }}',
         ]);
 
@@ -70,7 +70,6 @@ class MongoUpdateTest extends MongoTestCase
         $this->assertEquals($body, $response->getBody());
 
         $row    = $this->connection->selectCollection('app_news')->findOne(['id' => 2]);
-        $row    = \MongoDB\BSON\toPHP($row);
         $expect = [
             'id'      => 2,
             'title'   => 'lorem',
@@ -80,7 +79,7 @@ class MongoUpdateTest extends MongoTestCase
 
         unset($row['_id']);
 
-        $this->assertEquals($expect, $row);
+        $this->assertEquals($expect, $row->bsonSerialize());
     }
 
     public function testGetForm()

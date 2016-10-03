@@ -69,9 +69,8 @@ class MongoInsertTest extends MongoTestCase
         $this->assertEquals($body, $response->getBody());
 
         $row = $this->connection->selectCollection('app_news')->findOne(['id' => 3]);
-        $row = \MongoDB\BSON\toPHP($row);
 
-        $expect = [
+        $expect = (object) [
             'id'      => 3,
             'title'   => 'lorem',
             'content' => 'ipsum',
@@ -80,7 +79,7 @@ class MongoInsertTest extends MongoTestCase
 
         unset($row['_id']);
 
-        $this->assertEquals($expect, $row);
+        $this->assertEquals($expect, $row->bsonSerialize());
     }
 
     public function testGetForm()

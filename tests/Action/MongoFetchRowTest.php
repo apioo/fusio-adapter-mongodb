@@ -56,7 +56,7 @@ class MongoFetchRowTest extends MongoTestCase
         $body = $response->getBody();
         unset($body['_id']);
 
-        $result = [
+        $result = (object) [
             'id' => 2,
             'title' => 'bar',
             'content' => 'foo',
@@ -66,7 +66,7 @@ class MongoFetchRowTest extends MongoTestCase
         $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
-        $this->assertEquals($result, $body);
+        $this->assertEquals($result, $body->bsonSerialize());
     }
 
     public function testGetForm()

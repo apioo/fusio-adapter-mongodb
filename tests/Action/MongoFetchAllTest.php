@@ -60,14 +60,13 @@ class MongoFetchAllTest extends MongoTestCase
         unset($body['foo'][1]['_id']);
 
         $result = [];
-
-        $result[] = [
+        $result[] = (object) [
             'id' => 2,
             'title' => 'bar',
             'content' => 'foo',
             'date' => '2015-02-27 19:59:15',
         ];
-        $result[] = [
+        $result[] = (object) [
             'id' => 1,
             'title' => 'foo',
             'content' => 'bar',
@@ -77,7 +76,13 @@ class MongoFetchAllTest extends MongoTestCase
         $this->assertInstanceOf(ResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
-        $this->assertEquals(['foo' => $result], $body);
+
+        $actual = [];
+        foreach ($body['foo'] as $row) {
+            $actual[] = $row->bsonSerialize();
+        }
+
+        $this->assertEquals($result, $actual);
     }
 
     public function testGetForm()
