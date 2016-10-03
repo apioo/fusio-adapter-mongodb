@@ -70,7 +70,7 @@ class MongoUpdateTest extends MongoTestCase
         $this->assertEquals($body, $response->getBody());
 
         $row    = $this->connection->selectCollection('app_news')->findOne(['id' => 2]);
-        $expect = [
+        $expect = (object) [
             'id'      => 2,
             'title'   => 'lorem',
             'content' => 'ipsum',
