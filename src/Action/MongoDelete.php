@@ -31,7 +31,6 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use Fusio\Engine\Response\FactoryInterface as ResponseFactoryInterface;
 use Fusio\Engine\Template\FactoryInterface;
-use MongoCollection;
 use MongoDB;
 
 /**
@@ -78,8 +77,8 @@ class MongoDelete implements ActionInterface
         if ($connection instanceof MongoDB\Database) {
             $collection = $connection->selectCollection($configuration->get('collection'));
 
-            if ($collection instanceof MongoCollection) {
-                $collection->remove($criteria);
+            if ($collection instanceof MongoDB\Collection) {
+                $collection->deleteOne($criteria);
             } else {
                 throw new ConfigurationException('Invalid collection');
             }
