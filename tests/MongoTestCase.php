@@ -90,11 +90,13 @@ abstract class MongoTestCase extends \PHPUnit_Framework_TestCase
                 'database' => 'test',
             ]));
 
-            $collection = $connection->createCollection('app_news');
+            $connection->createCollection('app_news');
+
             $data       = $this->getFixtures();
+            $collection = $connection->selectCollection('app_news');
 
             foreach ($data as $row) {
-                $collection->insert($row);
+                $collection->insertOne($row);
             }
 
             return $connection;
