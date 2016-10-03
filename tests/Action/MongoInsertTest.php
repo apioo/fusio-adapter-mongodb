@@ -68,7 +68,9 @@ class MongoInsertTest extends MongoTestCase
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals($body, $response->getBody());
 
-        $row    = $this->connection->selectCollection('app_news')->findOne(['id' => 3]);
+        $row = $this->connection->selectCollection('app_news')->findOne(['id' => 3]);
+        $row = \MongoDB\BSON\toPHP($row);
+
         $expect = [
             'id'      => 3,
             'title'   => 'lorem',

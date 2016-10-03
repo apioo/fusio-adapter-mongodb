@@ -61,6 +61,7 @@ class MongoDeleteTest extends MongoTestCase
         $this->assertEquals($body, $response->getBody());
 
         $row    = $this->connection->selectCollection('app_news')->findOne(['id' => 2]);
+        $row    = \MongoDB\BSON\toPHP($row);
         $expect = null;
 
         $this->assertEquals($expect, $row);
