@@ -46,7 +46,7 @@ class MongoUpdateTest extends MongoTestCase
             'connection'   => 1,
             'propertyName' => 'foo',
             'collection'   => 'app_news',
-            'criteria'     => '{ "$id": {{ request.uriFragment("id")|integer }} }',
+            'criteria'     => '{ "$eq": { "id": {{ request.uriFragment("id")|integer }} } }',
             'document'     => '{{ request.body|json }}',
         ]);
 
