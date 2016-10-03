@@ -154,11 +154,6 @@ class MongoFetchAll implements ActionInterface
 
         $cursor = $collection->find($query, $options);
 
-        $data = array();
-        foreach ($cursor as $row) {
-            $data[] = $row;
-        }
-
-        return $data;
+        return $cursor->toArray();
     }
 }
