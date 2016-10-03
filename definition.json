@@ -1,0 +1,12 @@
+{
+  "actionClass": [
+    "Fusio\\Adapter\\Mongodb\\Action\\MongoDelete",
+    "Fusio\\Adapter\\Mongodb\\Action\\MongoFetchAll",
+    "Fusio\\Adapter\\Mongodb\\Action\\MongoFetchRow",
+    "Fusio\\Adapter\\Mongodb\\Action\\MongoInsert",
+    "Fusio\\Adapter\\Mongodb\\Action\\MongoUpdate"
+  ],
+  "connectionClass": [
+    "Fusio\\Adapter\\Mongodb\\Connection\\MongoDB"
+  ]
+}
