@@ -9,6 +9,4 @@ the following steps inside your Fusio project:
     composer require fusio/adapter-mongodb
     php bin/fusio system:register Fusio\Adapter\Mongodb\Adapter
 
-More informations about Fusio at http://fusio-project.org
-
-[Fusio]: http://demo.fusio-project.org/
+[Fusio]: http://fusio-project.org/
