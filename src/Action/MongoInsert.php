@@ -3,7 +3,7 @@
  * Fusio
  * A web-application to create dynamically RESTful APIs
  *
- * Copyright (C) 2015-2016 Christoph Kappestein <k42b3.x@gmail.com>
+ * Copyright (C) 2015-2016 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,45 +21,24 @@
 
 namespace Fusio\Adapter\Mongodb\Action;
 
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\ConnectorInterface;
+use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Exception\ConfigurationException;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Engine\Response\FactoryInterface as ResponseFactoryInterface;
-use Fusio\Engine\Template\FactoryInterface;
 use MongoDB;
 
 /**
  * MongoInsert
  *
- * @author  Christoph Kappestein <k42b3.x@gmail.com>
+ * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/gpl-3.0
  * @link    http://fusio-project.org
  */
-class MongoInsert implements ActionInterface
+class MongoInsert extends ActionAbstract
 {
-    /**
-     * @Inject
-     * @var \Fusio\Engine\ConnectorInterface
-     */
-    protected $connector;
-
-    /**
-     * @Inject
-     * @var \Fusio\Engine\Template\FactoryInterface
-     */
-    protected $templateFactory;
-
-    /**
-     * @Inject
-     * @var \Fusio\Engine\Response\FactoryInterface
-     */
-    protected $response;
-
     public function getName()
     {
         return 'Mongo-Insert';
@@ -97,20 +76,5 @@ class MongoInsert implements ActionInterface
         $builder->add($elementFactory->newConnection('connection', 'Connection', 'The MongoDB connection which should be used'));
         $builder->add($elementFactory->newInput('collection', 'Collection', 'text', 'Inserts the document into this collection'));
         $builder->add($elementFactory->newTextArea('document', 'Document', 'json', 'The document containing the data'));
-    }
-
-    public function setConnector(ConnectorInterface $connector)
-    {
-        $this->connector = $connector;
-    }
-
-    public function setTemplateFactory(FactoryInterface $templateFactory)
-    {
-        $this->templateFactory = $templateFactory;
-    }
-
-    public function setResponse(ResponseFactoryInterface $response)
-    {
-        $this->response = $response;
     }
 }

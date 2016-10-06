@@ -19,20 +19,25 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Adapter\Mongodb;
+namespace Fusio\Adapter\Mongodb\Tests;
 
-use Fusio\Engine\AdapterInterface;
+use Fusio\Adapter\Mongodb\Connection\MongoDB;
+use Fusio\Engine\Model\Connection;
+use Fusio\Engine\Parameters;
+use Fusio\Engine\Test\CallbackConnection;
+use Fusio\Engine\Test\DefinitionTestCase;
+use Fusio\Engine\Test\EngineTestCaseTrait;
 
 /**
- * Adapter
+ * DefinitionTest
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class Adapter implements AdapterInterface
+class DefinitionTest extends DefinitionTestCase
 {
-    public function getDefinition()
+    protected function getDefinition()
     {
         return __DIR__ . '/../definition.json';
     }

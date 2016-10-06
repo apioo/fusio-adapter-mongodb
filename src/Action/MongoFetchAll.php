@@ -3,7 +3,7 @@
  * Fusio
  * A web-application to create dynamically RESTful APIs
  *
- * Copyright (C) 2015-2016 Christoph Kappestein <k42b3.x@gmail.com>
+ * Copyright (C) 2015-2016 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,45 +21,24 @@
 
 namespace Fusio\Adapter\Mongodb\Action;
 
-use Fusio\Engine\ActionInterface;
-use Fusio\Engine\ConnectorInterface;
+use Fusio\Engine\ActionAbstract;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\Exception\ConfigurationException;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
-use Fusio\Engine\Response\FactoryInterface as ResponseFactoryInterface;
-use Fusio\Engine\Template\FactoryInterface;
 use MongoDB;
 
 /**
  * MongoFetchAll
  *
- * @author  Christoph Kappestein <k42b3.x@gmail.com>
+ * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/gpl-3.0
  * @link    http://fusio-project.org
  */
-class MongoFetchAll implements ActionInterface
+class MongoFetchAll extends ActionAbstract
 {
-    /**
-     * @Inject
-     * @var \Fusio\Engine\ConnectorInterface
-     */
-    protected $connector;
-
-    /**
-     * @Inject
-     * @var \Fusio\Engine\Template\FactoryInterface
-     */
-    protected $templateFactory;
-
-    /**
-     * @Inject
-     * @var \Fusio\Engine\Response\FactoryInterface
-     */
-    protected $response;
-
     public function getName()
     {
         return 'Mongo-Fetch-All';
@@ -118,21 +97,6 @@ class MongoFetchAll implements ActionInterface
         $builder->add($elementFactory->newTextArea('projection', 'Projection', 'json', 'Specifies the fields to return using <a href="http://docs.mongodb.org/manual/reference/operator/projection/">projection operators</a>. To return all fields in the matching document, omit this parameter.'));
         $builder->add($elementFactory->newInput('sort', 'Sort', 'text', 'Sorts the entries after a specific key. I.e. <code>title=1</code> to order after the title ascending or <code>title=-1</code> for descending'));
         $builder->add($elementFactory->newInput('limit', 'Limit', 'text', 'Integer how many entries should be fetched'));
-    }
-
-    public function setConnector(ConnectorInterface $connector)
-    {
-        $this->connector = $connector;
-    }
-
-    public function setTemplateFactory(FactoryInterface $templateFactory)
-    {
-        $this->templateFactory = $templateFactory;
-    }
-
-    public function setResponse(ResponseFactoryInterface $response)
-    {
-        $this->response = $response;
     }
 
     protected function query(MongoDB\Database $connection, $collection, $query, $fields, $sort, $limit)
