@@ -75,6 +75,6 @@ class MongoInsert extends ActionAbstract
     {
         $builder->add($elementFactory->newConnection('connection', 'Connection', 'The MongoDB connection which should be used'));
         $builder->add($elementFactory->newInput('collection', 'Collection', 'text', 'Inserts the document into this collection'));
-        $builder->add($elementFactory->newTextArea('document', 'Document', 'json', 'The document containing the data'));
+        $builder->add($elementFactory->newTextArea('document', 'Document', 'json', 'The document containing the data. It is possible to access values from the environment with i.e. <code ng-non-bindable>{{ request.body|json }}</code>. Click <a ng-click="help.showDialog(\'help/template.md\')">here</a> for more informations about the template syntax.'));
     }
 }
