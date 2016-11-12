@@ -37,6 +37,11 @@ use MongoDB\Client;
  */
 class MongoDB implements ConnectionInterface
 {
+    /**
+     * @var \MongoDB\Client
+     */
+    private static $client;
+
     public function getName()
     {
         return 'Mongo-DB';
@@ -55,10 +60,14 @@ class MongoDB implements ConnectionInterface
             parse_str($rawOptions, $options);
         }
 
-        if (class_exists('MongoDB\Client')) {
-            $client = new Client($config->get('url'), $options);
+        if (self::$client) {
+            return self::$client->selectDatabase($database);
+        }
 
-            return $client->selectDatabase($database);
+        if (class_exists('MongoDB\Client')) {
+            self::$client = new Client($config->get('url'), $options);
+
+            return self::$client->selectDatabase($database);
         } else {
             throw new ConfigurationException('PHP extension "mongod" is not installed');
         }

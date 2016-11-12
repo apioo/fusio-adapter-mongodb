@@ -90,7 +90,13 @@ abstract class MongoTestCase extends \PHPUnit_Framework_TestCase
                 'database' => 'test',
             ]));
 
-            $connection->createCollection('app_news');
+            try {
+                $connection->createCollection('app_news');
+            } catch (\MongoDB\Driver\Exception\RuntimeException $e) {
+                // collection already exists
+                $connection->dropCollection('app_news');
+                $connection->createCollection('app_news');
+            }
 
             $data       = $this->getFixtures();
             $collection = $connection->selectCollection('app_news');
@@ -112,16 +118,22 @@ abstract class MongoTestCase extends \PHPUnit_Framework_TestCase
     protected function getFixtures()
     {
         $result = [];
-        $result[] = [
-            'id' => 1,
+        $result[] = (object) [
             'title' => 'foo',
             'content' => 'bar',
+            'user' => (object) [
+                'name' => 'foo',
+                'uri' => 'http://google.com'
+            ],
             'date' => '2015-02-27 19:59:15',
         ];
-        $result[] = [
-            'id' => 2,
+        $result[] = (object) [
             'title' => 'bar',
             'content' => 'foo',
+            'user' => (object) [
+                'name' => 'bar',
+                'uri' => 'http://google.com'
+            ],
             'date' => '2015-02-27 19:59:15',
         ];
 
