@@ -151,7 +151,13 @@ JSON;
         $action   = $this->getActionFactory()->factory(MongoCollection::class);
         $response = $action->handle($this->getRequest('POST', [], [], [], $body), $parameters, $this->getContext());
 
-        $row  = $this->connection->selectCollection('app_news')->findOne([], ['sort' => ['$natural' => -1], 'limit' => 1]);
+        $row = $this->connection->selectCollection('app_news')->findOne([], ['sort' => ['$natural' => -1], 'limit' => 1]);
+
+        // transform the mongodb id to a string
+        if (isset($row['_id'])) {
+            $row['_id'] = (string) $row['_id'];
+        }
+
         $data = Transformer::toStdClass($row);
 
         $result = [
@@ -185,7 +191,13 @@ JSON;
 
     public function testHandlePut()
     {
-        $row  = $this->connection->selectCollection('app_news')->findOne([], ['sort' => ['$natural' => 1]]);
+        $row = $this->connection->selectCollection('app_news')->findOne([], ['sort' => ['$natural' => 1]]);
+
+        // transform the mongodb id to a string
+        if (isset($row['_id'])) {
+            $row['_id'] = (string) $row['_id'];
+        }
+
         $data = Transformer::toStdClass($row);
 
         $parameters = $this->getParameters([
@@ -217,7 +229,13 @@ JSON;
         $this->assertEquals($result, $response->getBody());
 
         // check whether the entry was updated
-        $row    = $this->connection->selectCollection('app_news')->findOne(['_id' => new ObjectID($data->_id)]);
+        $row = $this->connection->selectCollection('app_news')->findOne(['_id' => new ObjectID($data->_id)]);
+
+        // transform the mongodb id to a string
+        if (isset($row['_id'])) {
+            $row['_id'] = (string) $row['_id'];
+        }
+
         $data   = Transformer::toStdClass($row);
         $actual = json_encode($data, JSON_PRETTY_PRINT);
         $expect = <<<JSON
@@ -238,7 +256,13 @@ JSON;
 
     public function testHandleDelete()
     {
-        $row  = $this->connection->selectCollection('app_news')->findOne([], ['sort' => ['$natural' => 1]]);
+        $row = $this->connection->selectCollection('app_news')->findOne([], ['sort' => ['$natural' => 1]]);
+
+        // transform the mongodb id to a string
+        if (isset($row['_id'])) {
+            $row['_id'] = (string) $row['_id'];
+        }
+
         $data = Transformer::toStdClass($row);
 
         $parameters = $this->getParameters([

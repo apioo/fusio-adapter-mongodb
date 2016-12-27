@@ -143,6 +143,14 @@ class MongoCollection extends ActionAbstract
         $cursor     = $collection->find($filter, $options);
         $result     = $cursor->toArray();
 
+        // transform the mongodb ids to a string
+        $len = count($result);
+        for ($i = 0; $i < $len; $i++) {
+            if (isset($result[$i]['_id'])) {
+                $result[$i]['_id'] = (string) $result[$i]['_id'];
+            }
+        }
+
         return $this->response->build(200, [], [
             'totalResults' => $totalCount,
             'itemsPerPage' => $count,
@@ -156,6 +164,11 @@ class MongoCollection extends ActionAbstract
         $row = $collection->findOne(['_id' => new MongoDB\BSON\ObjectID($id)]);
 
         if (!empty($row)) {
+            // transform the mongodb id to a string
+            if (isset($row['_id'])) {
+                $row['_id'] = (string) $row['_id'];
+            }
+
             return $this->response->build(200, [], $row);
         } else {
             throw new StatusCode\NotFoundException('Entry not available');
