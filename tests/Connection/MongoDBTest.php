@@ -19,15 +19,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace Fusio\Adapter\Sql\Tests\Connection;
+namespace Fusio\Adapter\Mongodb\Tests\Connection;
 
 use Fusio\Adapter\Mongodb\Connection\MongoDB;
-use MongoDB\Database;
 use Fusio\Engine\Form\Builder;
 use Fusio\Engine\Form\Container;
 use Fusio\Engine\Form\Element\Input;
 use Fusio\Engine\Parameters;
 use Fusio\Engine\Test\EngineTestCaseTrait;
+use MongoDB\Database;
 
 /**
  * MongoDBTest
