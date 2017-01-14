@@ -1,6 +1,6 @@
 {
   "name": "fusio/adapter-mongodb",
-  "description": "Adapter which helps to work with a MongoDB",
+  "description": "Provides a connection to work with a MongoDB",
   "homepage": "http://fusio-project.org",
   "keywords": ["fusio-adapter"],
   "license": "AGPL-3.0",
