@@ -21,12 +21,16 @@
 
 namespace Fusio\Adapter\Mongodb\Connection;
 
+use Fusio\Engine\Connection\PingableInterface;
 use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Exception\ConfigurationException;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use MongoDB\Client;
+use MongoDB\Database;
+use MongoDB\Exception\Exception;
+use MongoDB\Driver;
 
 /**
  * MongoDB
@@ -35,7 +39,7 @@ use MongoDB\Client;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class MongoDB implements ConnectionInterface
+class MongoDB implements ConnectionInterface, PingableInterface
 {
     public function getName()
     {
@@ -69,5 +73,20 @@ class MongoDB implements ConnectionInterface
         $builder->add($elementFactory->newInput('url', 'Url', 'text', 'The connection string for the database i.e. <code>mongodb://localhost:27017</code>. Click <a ng-click="help.showDialog(\'help/connection/mongodb.md\')">here</a> for more informations.'));
         $builder->add($elementFactory->newInput('options', 'Options', 'text', 'Optional options for the connection. Click <a ng-click="help.showDialog(\'help/connection/mongodb.md\')">here</a> for more informations.'));
         $builder->add($elementFactory->newInput('database', 'Database', 'text', 'The name of the database which is used upon connection'));
+    }
+
+    public function ping($connection)
+    {
+        if ($connection instanceof Database) {
+            try {
+                $cursor   = $connection->getManager()->executeCommand($connection->getDatabaseName(), new Driver\Command(['ping' => 1]));
+                $response = $cursor->toArray();
+
+                return isset($response[0]['ok']) ? $response[0]['ok'] == 1 : false;
+            } catch(Exception $e) {
+            }
+        }
+
+        return false;
     }
 }

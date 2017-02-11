@@ -22,6 +22,7 @@
 namespace Fusio\Adapter\Mongodb\Tests\Connection;
 
 use Fusio\Adapter\Mongodb\Connection\MongoDB;
+use Fusio\Engine\Connection\PingableInterface;
 use Fusio\Engine\Form\Builder;
 use Fusio\Engine\Form\Container;
 use Fusio\Engine\Form\Element\Input;
@@ -42,8 +43,8 @@ class MongoDBTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConnection()
     {
-        /** @var MongoDB $connection */
-        $connection = $this->getConnectionFactory()->factory(MongoDB::class);
+        /** @var MongoDB $connectionFactory */
+        $connectionFactory = $this->getConnectionFactory()->factory(MongoDB::class);
 
         $config = new Parameters([
             'url'      => 'mongodb://127.0.0.1',
@@ -51,9 +52,9 @@ class MongoDBTest extends \PHPUnit_Framework_TestCase
             'database' => 'test',
         ]);
 
-        $mongo = $connection->getConnection($config);
+        $connection = $connectionFactory->getConnection($config);
 
-        $this->assertInstanceOf(Database::class, $mongo);
+        $this->assertInstanceOf(Database::class, $connection);
     }
 
     public function testConfigure()
@@ -71,5 +72,22 @@ class MongoDBTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(Input::class, $elements[0]);
         $this->assertInstanceOf(Input::class, $elements[1]);
         $this->assertInstanceOf(Input::class, $elements[2]);
+    }
+
+    public function testPing()
+    {
+        /** @var MongoDB $connectionFactory */
+        $connectionFactory = $this->getConnectionFactory()->factory(MongoDB::class);
+
+        $config = new Parameters([
+            'url'      => 'mongodb://127.0.0.1',
+            'options'  => '',
+            'database' => 'test',
+        ]);
+
+        $connection = $connectionFactory->getConnection($config);
+
+        $this->assertInstanceOf(PingableInterface::class, $connection);
+        $this->assertTrue($connectionFactory->ping($connection));
     }
 }
