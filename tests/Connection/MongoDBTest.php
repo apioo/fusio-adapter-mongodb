@@ -87,7 +87,6 @@ class MongoDBTest extends \PHPUnit_Framework_TestCase
 
         $connection = $connectionFactory->getConnection($config);
 
-        $this->assertInstanceOf(PingableInterface::class, $connection);
         $this->assertTrue($connectionFactory->ping($connection));
     }
 }
