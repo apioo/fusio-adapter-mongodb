@@ -82,7 +82,7 @@ class MongoDB implements ConnectionInterface, PingableInterface
                 $cursor   = $connection->getManager()->executeCommand($connection->getDatabaseName(), new Driver\Command(['ping' => 1]));
                 $response = $cursor->toArray();
 
-                return isset($response[0]['ok']) ? $response[0]['ok'] == 1 : false;
+                return isset($response[0]->ok) ? $response[0]->ok == 1 : false;
             } catch(Exception $e) {
             }
         }
