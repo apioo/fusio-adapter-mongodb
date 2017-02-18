@@ -79,7 +79,7 @@ class MongoDB implements ConnectionInterface, PingableInterface
     {
         if ($connection instanceof Database) {
             try {
-                $cursor   = $connection->getManager()->executeCommand($connection->getDatabaseName(), new Driver\Command(['ping' => 1]));
+                $cursor   = $connection->command(['ping' => 1]);
                 $response = $cursor->toArray();
 
                 return isset($response[0]->ok) ? $response[0]->ok == 1 : false;
