@@ -14,7 +14,7 @@
   "require": {
     "php": ">=7",
     "fusio/engine": "^0.6@dev",
-    "mongodb/mongodb": "^1.0"
+    "mongodb/mongodb": "~1.1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^5.6",
