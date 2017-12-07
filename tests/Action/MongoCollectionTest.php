@@ -26,7 +26,6 @@ use Fusio\Adapter\Mongodb\Tests\MongoTestCase;
 use Fusio\Engine\Form\Builder;
 use Fusio\Engine\Form\Container;
 use Fusio\Engine\ResponseInterface;
-use Fusio\Engine\Test\EngineTestCaseTrait;
 use MongoDB\BSON\ObjectID;
 use PSX\Data\Record\Transformer;
 use PSX\Record\Record;
@@ -40,8 +39,6 @@ use PSX\Record\Record;
  */
 class MongoCollectionTest extends MongoTestCase
 {
-    use EngineTestCaseTrait;
-
     public function testHandleGetCollection()
     {
         $parameters = $this->getParameters([
