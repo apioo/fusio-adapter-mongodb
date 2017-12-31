@@ -13,7 +13,7 @@
   ],
   "require": {
     "php": ">=7.0",
-    "fusio/engine": "^1.0",
+    "fusio/engine": "^2.0",
     "mongodb/mongodb": "^1.1"
   },
   "require-dev": {
