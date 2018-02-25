@@ -26,9 +26,9 @@ use Fusio\Adapter\Mongodb\Tests\MongoTestCase;
 use Fusio\Engine\Form\Builder;
 use Fusio\Engine\Form\Container;
 use MongoDB\BSON\ObjectID;
-use PSX\Data\Record\Transformer;
 use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Record\Record;
+use PSX\Record\Transformer;
 
 /**
  * MongoCollectionTest
@@ -49,7 +49,7 @@ class MongoCollectionTest extends MongoTestCase
         $action   = $this->getActionFactory()->factory(MongoCollection::class);
         $response = $action->handle($this->getRequest(), $parameters, $this->getContext());
 
-        $data = Transformer::toStdClass($response->getBody());
+        $data = Transformer::toObject($response->getBody());
 
         $rows = $this->connection->selectCollection('app_news')->find();
         $ids  = [];
@@ -106,7 +106,7 @@ JSON;
         $action   = $this->getActionFactory()->factory(MongoCollection::class);
         $response = $action->handle($this->getRequest('GET', ['id' => $row->_id]), $parameters, $this->getContext());
 
-        $data = Transformer::toStdClass($response->getBody());
+        $data = Transformer::toObject($response->getBody());
 
         $actual = json_encode($data, JSON_PRETTY_PRINT);
         $expect = <<<JSON
@@ -155,7 +155,7 @@ JSON;
             $row['_id'] = (string) $row['_id'];
         }
 
-        $data = Transformer::toStdClass($row);
+        $data = Transformer::toObject($row);
 
         $result = [
             'success' => true,
@@ -195,7 +195,7 @@ JSON;
             $row['_id'] = (string) $row['_id'];
         }
 
-        $data = Transformer::toStdClass($row);
+        $data = Transformer::toObject($row);
 
         $parameters = $this->getParameters([
             'connection' => 1,
@@ -233,7 +233,7 @@ JSON;
             $row['_id'] = (string) $row['_id'];
         }
 
-        $data   = Transformer::toStdClass($row);
+        $data   = Transformer::toObject($row);
         $actual = json_encode($data, JSON_PRETTY_PRINT);
         $expect = <<<JSON
 {
@@ -260,7 +260,7 @@ JSON;
             $row['_id'] = (string) $row['_id'];
         }
 
-        $data = Transformer::toStdClass($row);
+        $data = Transformer::toObject($row);
 
         $parameters = $this->getParameters([
             'connection' => 1,
