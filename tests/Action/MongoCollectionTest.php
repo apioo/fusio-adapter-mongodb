@@ -25,9 +25,9 @@ use Fusio\Adapter\Mongodb\Action\MongoCollection;
 use Fusio\Adapter\Mongodb\Tests\MongoTestCase;
 use Fusio\Engine\Form\Builder;
 use Fusio\Engine\Form\Container;
-use Fusio\Engine\ResponseInterface;
 use MongoDB\BSON\ObjectID;
 use PSX\Data\Record\Transformer;
+use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Record\Record;
 
 /**
@@ -88,7 +88,7 @@ class MongoCollectionTest extends MongoTestCase
 }
 JSON;
 
-        $this->assertInstanceOf(ResponseInterface::class, $response);
+        $this->assertInstanceOf(HttpResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
@@ -122,7 +122,7 @@ JSON;
 }
 JSON;
 
-        $this->assertInstanceOf(ResponseInterface::class, $response);
+        $this->assertInstanceOf(HttpResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertJsonStringEqualsJsonString($expect, $actual, $actual);
@@ -163,7 +163,7 @@ JSON;
             'id'      => $data->_id
         ];
 
-        $this->assertInstanceOf(ResponseInterface::class, $response);
+        $this->assertInstanceOf(HttpResponseInterface::class, $response);
         $this->assertEquals(201, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals($result, $response->getBody());
@@ -220,7 +220,7 @@ JSON;
             'message' => 'Entry successful updated',
         ];
 
-        $this->assertInstanceOf(ResponseInterface::class, $response);
+        $this->assertInstanceOf(HttpResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals($result, $response->getBody());
@@ -275,7 +275,7 @@ JSON;
             'message' => 'Entry successful deleted',
         ];
 
-        $this->assertInstanceOf(ResponseInterface::class, $response);
+        $this->assertInstanceOf(HttpResponseInterface::class, $response);
         $this->assertEquals(200, $response->getStatusCode());
         $this->assertEquals([], $response->getHeaders());
         $this->assertEquals($result, $response->getBody());
