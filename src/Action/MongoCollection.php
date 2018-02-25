@@ -29,8 +29,8 @@ use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use MongoDB;
-use PSX\Data\Record\Transformer;
 use PSX\Http\Exception as StatusCode;
+use PSX\Record\Transformer;
 
 /**
  * MongoCollection
@@ -179,7 +179,7 @@ class MongoCollection extends ActionAbstract
     {
         $id = $request->getUriFragment('id');
         if (empty($id)) {
-            $body   = Transformer::toStdClass($request->getBody());
+            $body   = Transformer::toObject($request->getBody());
             $result = $collection->insertOne($body);
 
             return $this->response->build(201, [], [
@@ -196,7 +196,7 @@ class MongoCollection extends ActionAbstract
     {
         $id = $request->getUriFragment('id');
         if (!empty($id)) {
-            $body = Transformer::toStdClass($request->getBody());
+            $body = Transformer::toObject($request->getBody());
 
             $collection->updateOne(['_id' => new MongoDB\BSON\ObjectID($id)], ['$set' => $body]);
 
