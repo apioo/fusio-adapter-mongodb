@@ -162,7 +162,9 @@ JSON;
         $actual = BSON\toJSON(BSON\fromPHP($row));
         $expect = <<<JSON
 {
-    "_id": "{$row['_id']}",
+    "_id": {
+        "\$oid" : "{$row['_id']}"
+    },
     "title": "lorem",
     "content": "ipsum",
     "user": {
@@ -214,7 +216,9 @@ JSON;
         $actual = BSON\toJSON(BSON\fromPHP($row));
         $expect = <<<JSON
 {
-    "_id": "{$row['_id']}",
+    "_id": {
+        "\$oid" : "{$row['_id']}"
+    },
     "title": "lorem",
     "content": "ipsum",
     "user": {
