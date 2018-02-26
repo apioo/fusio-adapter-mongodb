@@ -25,10 +25,9 @@ use Fusio\Adapter\Mongodb\Action\MongoCollection;
 use Fusio\Adapter\Mongodb\Tests\MongoTestCase;
 use Fusio\Engine\Form\Builder;
 use Fusio\Engine\Form\Container;
-use MongoDB\BSON\ObjectID;
+use MongoDB\BSON;
 use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Record\Record;
-use PSX\Record\Transformer;
 
 /**
  * MongoCollectionTest
@@ -49,14 +48,13 @@ class MongoCollectionTest extends MongoTestCase
         $action   = $this->getActionFactory()->factory(MongoCollection::class);
         $response = $action->handle($this->getRequest(), $parameters, $this->getContext());
 
-        $data = Transformer::toObject($response->getBody());
-
         $rows = $this->connection->selectCollection('app_news')->find();
         $ids  = [];
         foreach ($rows as $row) {
             $ids[] = $row->_id;
         }
 
+        $data   = $response->getBody();
         $actual = json_encode($data, JSON_PRETTY_PRINT);
         $expect = <<<JSON
 {
@@ -106,8 +104,7 @@ JSON;
         $action   = $this->getActionFactory()->factory(MongoCollection::class);
         $response = $action->handle($this->getRequest('GET', ['id' => $row->_id]), $parameters, $this->getContext());
 
-        $data = Transformer::toObject($response->getBody());
-
+        $data   = $response->getBody();
         $actual = json_encode($data, JSON_PRETTY_PRINT);
         $expect = <<<JSON
 {
@@ -150,17 +147,10 @@ JSON;
 
         $row = $this->connection->selectCollection('app_news')->findOne([], ['sort' => ['$natural' => -1], 'limit' => 1]);
 
-        // transform the mongodb id to a string
-        if (isset($row['_id'])) {
-            $row['_id'] = (string) $row['_id'];
-        }
-
-        $data = Transformer::toObject($row);
-
         $result = [
             'success' => true,
             'message' => 'Entry successful created',
-            'id'      => $data->_id
+            'id'      => (string) $row['_id']
         ];
 
         $this->assertInstanceOf(HttpResponseInterface::class, $response);
@@ -169,10 +159,10 @@ JSON;
         $this->assertEquals($result, $response->getBody());
 
         // check whether the entry was inserted
-        $actual = json_encode($data, JSON_PRETTY_PRINT);
+        $actual = BSON\toJSON(BSON\fromPHP($row));
         $expect = <<<JSON
 {
-    "_id": "{$data->_id}",
+    "_id": "{$row['_id']}",
     "title": "lorem",
     "content": "ipsum",
     "user": {
@@ -190,13 +180,6 @@ JSON;
     {
         $row = $this->connection->selectCollection('app_news')->findOne([], ['sort' => ['$natural' => 1]]);
 
-        // transform the mongodb id to a string
-        if (isset($row['_id'])) {
-            $row['_id'] = (string) $row['_id'];
-        }
-
-        $data = Transformer::toObject($row);
-
         $parameters = $this->getParameters([
             'connection' => 1,
             'collection' => 'app_news',
@@ -213,7 +196,7 @@ JSON;
         ]);
 
         $action   = $this->getActionFactory()->factory(MongoCollection::class);
-        $response = $action->handle($this->getRequest('PUT', ['id' => $data->_id], [], [], $body), $parameters, $this->getContext());
+        $response = $action->handle($this->getRequest('PUT', ['id' => (string) $row['_id']], [], [], $body), $parameters, $this->getContext());
 
         $result = [
             'success' => true,
@@ -226,18 +209,12 @@ JSON;
         $this->assertEquals($result, $response->getBody());
 
         // check whether the entry was updated
-        $row = $this->connection->selectCollection('app_news')->findOne(['_id' => new ObjectID($data->_id)]);
+        $row = $this->connection->selectCollection('app_news')->findOne(['_id' => $row['_id']]);
 
-        // transform the mongodb id to a string
-        if (isset($row['_id'])) {
-            $row['_id'] = (string) $row['_id'];
-        }
-
-        $data   = Transformer::toObject($row);
-        $actual = json_encode($data, JSON_PRETTY_PRINT);
+        $actual = BSON\toJSON(BSON\fromPHP($row));
         $expect = <<<JSON
 {
-    "_id": "{$data->_id}",
+    "_id": "{$row['_id']}",
     "title": "lorem",
     "content": "ipsum",
     "user": {
@@ -255,20 +232,13 @@ JSON;
     {
         $row = $this->connection->selectCollection('app_news')->findOne([], ['sort' => ['$natural' => 1]]);
 
-        // transform the mongodb id to a string
-        if (isset($row['_id'])) {
-            $row['_id'] = (string) $row['_id'];
-        }
-
-        $data = Transformer::toObject($row);
-
         $parameters = $this->getParameters([
             'connection' => 1,
             'collection' => 'app_news',
         ]);
 
         $action   = $this->getActionFactory()->factory(MongoCollection::class);
-        $response = $action->handle($this->getRequest('DELETE', ['id' => $data->_id]), $parameters, $this->getContext());
+        $response = $action->handle($this->getRequest('DELETE', ['id' => (string) $row['_id']]), $parameters, $this->getContext());
 
         $result = [
             'success' => true,
@@ -281,7 +251,7 @@ JSON;
         $this->assertEquals($result, $response->getBody());
 
         // check whether the entry was deleted
-        $row = $this->connection->selectCollection('app_news')->findOne(['_id' => new ObjectID($data->_id)]);
+        $row = $this->connection->selectCollection('app_news')->findOne(['_id' => $row['_id']]);
 
         $this->assertEmpty($row);
     }
