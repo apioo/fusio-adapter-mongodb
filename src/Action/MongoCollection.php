@@ -52,22 +52,39 @@ class MongoCollection extends ActionAbstract
 
         if ($connection instanceof MongoDB\Database) {
             $collection = $connection->selectCollection($configuration->get('collection'));
+            $id         = (int) $request->getUriFragment('id');
 
             switch ($request->getMethod()) {
                 case 'GET':
-                    return $this->doGet($request, $collection);
+                    if (empty($id)) {
+                        return $this->doGetCollection($request, $collection);
+                    } else {
+                        return $this->doGetEntity($id, $collection);
+                    }
                     break;
 
                 case 'POST':
+                    if (!empty($id)) {
+                        throw new StatusCode\MethodNotAllowedException('Method not allowed', ['GET', 'POST']);
+                    }
+
                     return $this->doPost($request, $collection);
                     break;
 
                 case 'PUT':
-                    return $this->doPut($request, $collection);
+                    if (empty($id)) {
+                        throw new StatusCode\MethodNotAllowedException('Method not allowed', ['GET', 'PUT', 'DELETE']);
+                    }
+
+                    return $this->doPut($request, $collection, $id);
                     break;
 
                 case 'DELETE':
-                    return $this->doDelete($request, $collection);
+                    if (empty($id)) {
+                        throw new StatusCode\MethodNotAllowedException('Method not allowed', ['GET', 'PUT', 'DELETE']);
+                    }
+
+                    return $this->doDelete($request, $collection, $id);
                     break;
             }
 
@@ -86,22 +103,6 @@ class MongoCollection extends ActionAbstract
     {
         $builder->add($elementFactory->newConnection('connection', 'Connection', 'The MongoDB connection which should be used'));
         $builder->add($elementFactory->newInput('collection', 'Collection', 'text', 'Name of the collection'));
-    }
-
-    protected function doGet(RequestInterface $request, MongoDB\Collection $collection)
-    {
-        $id = $request->getUriFragment('id');
-        if (empty($id)) {
-            return $this->doGetCollection(
-                $request,
-                $collection
-            );
-        } else {
-            return $this->doGetEntity(
-                $id,
-                $collection
-            );
-        }
     }
 
     protected function doGetCollection(RequestInterface $request, MongoDB\Collection $collection)
@@ -177,50 +178,35 @@ class MongoCollection extends ActionAbstract
 
     protected function doPost(RequestInterface $request, MongoDB\Collection $collection)
     {
-        $id = $request->getUriFragment('id');
-        if (empty($id)) {
-            $body   = Transformer::toObject($request->getBody());
-            $result = $collection->insertOne($body);
+        $body   = Transformer::toObject($request->getBody());
+        $result = $collection->insertOne($body);
 
-            return $this->response->build(201, [], [
-                'success' => true,
-                'message' => 'Entry successful created',
-                'id'      => (string) $result->getInsertedId()
-            ]);
-        } else {
-            throw new StatusCode\MethodNotAllowedException('Method not allowed', ['GET', 'POST']);
-        }
+        return $this->response->build(201, [], [
+            'success' => true,
+            'message' => 'Entry successful created',
+            'id'      => (string) $result->getInsertedId()
+        ]);
     }
 
-    protected function doPut(RequestInterface $request, MongoDB\Collection $collection)
+    protected function doPut(RequestInterface $request, MongoDB\Collection $collection, $id)
     {
-        $id = $request->getUriFragment('id');
-        if (!empty($id)) {
-            $body = Transformer::toObject($request->getBody());
+        $body = Transformer::toObject($request->getBody());
 
-            $collection->updateOne(['_id' => new MongoDB\BSON\ObjectID($id)], ['$set' => $body]);
+        $collection->updateOne(['_id' => new MongoDB\BSON\ObjectID($id)], ['$set' => $body]);
 
-            return $this->response->build(200, [], [
-                'success' => true,
-                'message' => 'Entry successful updated'
-            ]);
-        } else {
-            throw new StatusCode\MethodNotAllowedException('Method not allowed', ['GET', 'PUT', 'DELETE']);
-        }
+        return $this->response->build(200, [], [
+            'success' => true,
+            'message' => 'Entry successful updated'
+        ]);
     }
 
-    protected function doDelete(RequestInterface $request, MongoDB\Collection $collection)
+    protected function doDelete(RequestInterface $request, MongoDB\Collection $collection, $id)
     {
-        $id = $request->getUriFragment('id');
-        if (!empty($id)) {
-            $collection->deleteOne(['_id' => new MongoDB\BSON\ObjectID($id)]);
+        $collection->deleteOne(['_id' => new MongoDB\BSON\ObjectID($id)]);
 
-            return $this->response->build(200, [], [
-                'success' => true,
-                'message' => 'Entry successful deleted'
-            ]);
-        } else {
-            throw new StatusCode\MethodNotAllowedException('Method not allowed', ['GET', 'PUT', 'DELETE']);
-        }
+        return $this->response->build(200, [], [
+            'success' => true,
+            'message' => 'Entry successful deleted'
+        ]);
     }
 }
