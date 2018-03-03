@@ -52,7 +52,7 @@ class MongoCollection extends ActionAbstract
 
         if ($connection instanceof MongoDB\Database) {
             $collection = $connection->selectCollection($configuration->get('collection'));
-            $id         = (int) $request->getUriFragment('id');
+            $id         = $request->getUriFragment('id');
 
             switch ($request->getMethod()) {
                 case 'GET':
