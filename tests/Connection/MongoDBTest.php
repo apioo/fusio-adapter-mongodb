@@ -29,6 +29,7 @@ use Fusio\Engine\Form\Element\Input;
 use Fusio\Engine\Parameters;
 use Fusio\Engine\Test\EngineTestCaseTrait;
 use MongoDB\Database;
+use PHPUnit\Framework\TestCase;
 
 /**
  * MongoDBTest
@@ -37,7 +38,7 @@ use MongoDB\Database;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    http://fusio-project.org
  */
-class MongoDBTest extends \PHPUnit_Framework_TestCase
+class MongoDBTest extends TestCase
 {
     use EngineTestCaseTrait;
 
