@@ -69,6 +69,17 @@ abstract class MongoTestCase extends TestCase
         $this->getConnectionRepository()->add($connection);
     }
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        if (self::$hasConnection) {
+            if ($this->connection instanceof \MongoDB\Database) {
+                $this->connection->dropCollection('app_news');
+            }
+        }
+    }
+
     protected function newConnection()
     {
         $connector = new MongoDB();
