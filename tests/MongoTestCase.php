@@ -46,7 +46,7 @@ abstract class MongoTestCase extends TestCase
      */
     protected $connection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!self::$hasConnection) {
             $this->markTestSkipped('MongoDB connection not available');
