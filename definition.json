@@ -1,6 +1,10 @@
 {
   "actionClass": [
-    "Fusio\\Adapter\\Mongodb\\Action\\MongoCollection"
+    "Fusio\\Adapter\\Mongodb\\Action\\MongoDeleteOne",
+    "Fusio\\Adapter\\Mongodb\\Action\\MongoFindAll",
+    "Fusio\\Adapter\\Mongodb\\Action\\MongoFindOne",
+    "Fusio\\Adapter\\Mongodb\\Action\\MongoInsertOne",
+    "Fusio\\Adapter\\Mongodb\\Action\\MongoUpdateOne"
   ],
   "connectionClass": [
     "Fusio\\Adapter\\Mongodb\\Connection\\MongoDB"
