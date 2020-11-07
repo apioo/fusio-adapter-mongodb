@@ -45,7 +45,7 @@ class MongoInsertOne extends MongoAbstract
         $connection = $this->getConnection($configuration);
         $collection = $connection->selectCollection($this->getCollection($configuration));
 
-        $body   = Transformer::toObject($request->get('body'));
+        $body   = Transformer::toObject($request->getPayload());
         $result = $collection->insertOne($body);
 
         return $this->response->build(201, [], [

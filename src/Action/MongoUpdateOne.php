@@ -47,7 +47,7 @@ class MongoUpdateOne extends MongoAbstract
         $collection = $connection->selectCollection($this->getCollection($configuration));
 
         $id   = $request->get('id');
-        $body = Transformer::toObject($request->get('body'));
+        $body = Transformer::toObject($request->getPayload());
 
         $collection->updateOne(['_id' => new MongoDB\BSON\ObjectID($id)], ['$set' => $body]);
 
