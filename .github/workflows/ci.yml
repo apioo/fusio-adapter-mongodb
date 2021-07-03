@@ -13,7 +13,7 @@ jobs:
          - 7.4
          - 8.0
     services:
-      memcached:
+      mongo:
         image: mongo
     steps:
       - name: Checkout
