@@ -86,9 +86,9 @@ abstract class MongoTestCase extends TestCase
 
         try {
             $connection = $connector->getConnection(new Parameters([
-                'url'      => 'mongodb://127.0.0.1',
+                'url'      => 'mongodb://root:test1234@127.0.0.1',
                 'options'  => '',
-                'database' => 'test',
+                'database' => 'fusio',
             ]));
 
             try {

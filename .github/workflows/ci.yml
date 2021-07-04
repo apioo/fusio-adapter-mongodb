@@ -15,6 +15,17 @@ jobs:
     services:
       mongo:
         image: mongo
+        env:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: test1234
+          MONGO_INITDB_DATABASE: fusio
+        options: >-
+          --health-cmd mongo
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 27017:27017
     steps:
       - name: Checkout
         uses: actions/checkout@v2
