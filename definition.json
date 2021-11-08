@@ -8,5 +8,8 @@
   ],
   "connectionClass": [
     "Fusio\\Adapter\\Mongodb\\Connection\\MongoDB"
+  ],
+  "routesClass": [
+    "Fusio\\Adapter\\Mongodb\\Routes\\MongoCollection"
   ]
 }

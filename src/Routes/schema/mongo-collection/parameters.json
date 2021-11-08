@@ -1,0 +1,41 @@
+{
+  "definitions": {
+    "MongoCollectionParameters": {
+      "type": "object",
+      "properties": {
+        "startIndex": {
+          "type": "integer"
+        },
+        "count": {
+          "type": "integer"
+        },
+        "sortBy": {
+          "type": "string"
+        },
+        "sortOrder": {
+          "type": "string",
+          "enum": [
+            "ASC",
+            "DESC"
+          ]
+        },
+        "filterBy": {
+          "type": "string"
+        },
+        "filterOp": {
+          "type": "string",
+          "enum": [
+            "contains",
+            "equals",
+            "startsWith",
+            "present"
+          ]
+        },
+        "filterValue": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "$ref": "MongoCollectionParameters"
+}
