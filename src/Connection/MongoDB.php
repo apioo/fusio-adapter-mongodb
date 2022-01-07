@@ -3,7 +3,7 @@
  * Fusio
  * A web-application to create dynamically RESTful APIs
  *
- * Copyright (C) 2015-2018 Christoph Kappestein <christoph.kappestein@gmail.com>
+ * Copyright (C) 2015-2022 Christoph Kappestein <christoph.kappestein@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as published by
@@ -37,20 +37,16 @@ use MongoDB\Driver;
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
- * @link    http://fusio-project.org
+ * @link    https://www.fusio-project.org/
  */
 class MongoDB implements ConnectionInterface, PingableInterface
 {
-    public function getName()
+    public function getName(): string
     {
         return 'Mongo-DB';
     }
 
-    /**
-     * @param \Fusio\Engine\ParametersInterface $config
-     * @return \MongoDB\Database
-     */
-    public function getConnection(ParametersInterface $config)
+    public function getConnection(ParametersInterface $config): Database
     {
         $database   = $config->get('database');
         $options    = [];
@@ -68,21 +64,21 @@ class MongoDB implements ConnectionInterface, PingableInterface
         }
     }
 
-    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
         $builder->add($elementFactory->newInput('url', 'Url', 'text', 'The connection string for the database i.e. <code>mongodb://localhost:27017</code>. Click <a ng-click="help.showDialog(\'help/connection/mongodb.md\')">here</a> for more informations.'));
         $builder->add($elementFactory->newInput('options', 'Options', 'text', 'Optional options for the connection. Click <a ng-click="help.showDialog(\'help/connection/mongodb.md\')">here</a> for more informations.'));
         $builder->add($elementFactory->newInput('database', 'Database', 'text', 'The name of the database which is used upon connection'));
     }
 
-    public function ping($connection)
+    public function ping(mixed $connection): bool
     {
         if ($connection instanceof Database) {
             try {
                 $cursor   = $connection->command(['ping' => 1]);
                 $response = $cursor->toArray();
 
-                return isset($response[0]->ok) ? $response[0]->ok == 1 : false;
+                return isset($response[0]->ok) && $response[0]->ok == 1;
             } catch(Exception $e) {
             }
         }

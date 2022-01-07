@@ -36,7 +36,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @author  Christoph Kappestein <christoph.kappestein@gmail.com>
  * @license http://www.gnu.org/licenses/agpl-3.0
- * @link    http://fusio-project.org
+ * @link    https://www.fusio-project.org/
  */
 class MongoDBTest extends TestCase
 {
