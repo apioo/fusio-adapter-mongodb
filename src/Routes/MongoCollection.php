@@ -43,15 +43,8 @@ use Fusio\Engine\Routes\SetupInterface;
  */
 class MongoCollection implements ProviderInterface
 {
-    /**
-     * @var ConnectorInterface
-     */
-    private $connector;
-
-    /**
-     * @var SchemaBuilder
-     */
-    private $schemaBuilder;
+    private ConnectorInterface $connector;
+    private SchemaBuilder $schemaBuilder;
 
     public function __construct(ConnectorInterface $connector)
     {
@@ -59,12 +52,12 @@ class MongoCollection implements ProviderInterface
         $this->schemaBuilder = new SchemaBuilder();
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'Mongo-Collection';
     }
 
-    public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration)
+    public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration): void
     {
         $prefix = $this->getPrefix($basePath);
         $schemaParameters = $setup->addSchema('Mongo-Collection-Parameters', $this->schemaBuilder->getParameters());
@@ -159,13 +152,13 @@ class MongoCollection implements ProviderInterface
         ]);
     }
 
-    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory)
+    public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
         $builder->add($elementFactory->newConnection('connection', 'Connection', 'The mongo connection which should be used'));
         $builder->add($elementFactory->newInput('collection', 'Collection', 'text', 'Name of the collection'));
     }
 
-    private function getPrefix(string $path)
+    private function getPrefix(string $path): string
     {
         return implode('-', array_map('ucfirst', array_filter(explode('/', $path))));
     }
