@@ -66,8 +66,8 @@ class MongoDB implements ConnectionInterface, PingableInterface
 
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
-        $builder->add($elementFactory->newInput('url', 'Url', 'text', 'The connection string for the database i.e. <code>mongodb://localhost:27017</code>. Click <a ng-click="help.showDialog(\'help/connection/mongodb.md\')">here</a> for more informations.'));
-        $builder->add($elementFactory->newInput('options', 'Options', 'text', 'Optional options for the connection. Click <a ng-click="help.showDialog(\'help/connection/mongodb.md\')">here</a> for more informations.'));
+        $builder->add($elementFactory->newInput('url', 'Url', 'text', 'The connection string for the database i.e. <code>mongodb://localhost:27017</code'));
+        $builder->add($elementFactory->newInput('options', 'Options', 'text', 'Optional options for the connection'));
         $builder->add($elementFactory->newInput('database', 'Database', 'text', 'The name of the database which is used upon connection'));
     }
 
