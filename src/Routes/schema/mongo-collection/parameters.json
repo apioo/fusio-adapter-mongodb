@@ -1,6 +1,6 @@
 {
   "definitions": {
-    "MongoCollectionParameters": {
+    "Mongo_Collection_Parameters": {
       "type": "object",
       "properties": {
         "startIndex": {
@@ -37,5 +37,5 @@
       }
     }
   },
-  "$ref": "MongoCollectionParameters"
+  "$ref": "Mongo_Collection_Parameters"
 }
