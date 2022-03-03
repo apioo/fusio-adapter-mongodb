@@ -51,7 +51,7 @@ class MongoFindOne extends MongoAbstract
         $row = $collection->findOne(['_id' => new MongoDB\BSON\ObjectID($id)]);
 
         if (empty($row)) {
-            throw new StatusCode\NotFoundException('Entry not available');
+            throw new StatusCode\NotFoundException('Document not available');
         }
 
         // transform the mongodb id to a string

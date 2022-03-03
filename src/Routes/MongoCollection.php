@@ -60,29 +60,29 @@ class MongoCollection implements ProviderInterface
     public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration): void
     {
         $prefix = $this->getPrefix($basePath);
-        $schemaParameters = $setup->addSchema('Mongo-Collection-Parameters', $this->schemaBuilder->getParameters());
+        $schemaParameters = $setup->addSchema('Mongo_Collection_Parameters', $this->schemaBuilder->getParameters());
 
-        $fetchAllAction = $setup->addAction($prefix . '-Find-All', MongoFindAll::class, PhpClass::class, [
+        $fetchAllAction = $setup->addAction($prefix . '_Find_All', MongoFindAll::class, PhpClass::class, [
             'connection' => $configuration->get('connection'),
             'collection' => $configuration->get('collection'),
         ]);
 
-        $fetchRowAction = $setup->addAction($prefix . '-Find-Row', MongoFindOne::class, PhpClass::class, [
+        $fetchRowAction = $setup->addAction($prefix . '_Find_Row', MongoFindOne::class, PhpClass::class, [
             'connection' => $configuration->get('connection'),
             'collection' => $configuration->get('collection'),
         ]);
 
-        $deleteAction = $setup->addAction($prefix . '-Delete', MongoDeleteOne::class, PhpClass::class, [
+        $deleteAction = $setup->addAction($prefix . '_Delete', MongoDeleteOne::class, PhpClass::class, [
             'connection' => $configuration->get('connection'),
             'collection' => $configuration->get('collection'),
         ]);
 
-        $insertAction = $setup->addAction($prefix . '-Insert', MongoInsertOne::class, PhpClass::class, [
+        $insertAction = $setup->addAction($prefix . '_Insert', MongoInsertOne::class, PhpClass::class, [
             'connection' => $configuration->get('connection'),
             'collection' => $configuration->get('collection'),
         ]);
 
-        $updateAction = $setup->addAction($prefix . '-Update', MongoUpdateOne::class, PhpClass::class, [
+        $updateAction = $setup->addAction($prefix . '_Update', MongoUpdateOne::class, PhpClass::class, [
             'connection' => $configuration->get('connection'),
             'collection' => $configuration->get('collection'),
         ]);
@@ -94,7 +94,7 @@ class MongoCollection implements ProviderInterface
                     'GET' => [
                         'active' => true,
                         'public' => true,
-                        'description' => 'Returns a collection of entities',
+                        'description' => 'Returns a collection of documents',
                         'parameters' => $schemaParameters,
                         'responses' => [
                             200 => -1,
@@ -104,7 +104,7 @@ class MongoCollection implements ProviderInterface
                     'POST' => [
                         'active' => true,
                         'public' => false,
-                        'description' => 'Creates a new entity',
+                        'description' => 'Creates a new document',
                         'request' => -1,
                         'responses' => [
                             201 => -1,
@@ -122,7 +122,7 @@ class MongoCollection implements ProviderInterface
                     'GET' => [
                         'active' => true,
                         'public' => true,
-                        'description' => 'Returns a single entity',
+                        'description' => 'Returns a single document',
                         'responses' => [
                             200 => -1,
                         ],
@@ -131,7 +131,7 @@ class MongoCollection implements ProviderInterface
                     'PUT' => [
                         'active' => true,
                         'public' => false,
-                        'description' => 'Updates an existing entity',
+                        'description' => 'Updates an existing document',
                         'request' => -1,
                         'responses' => [
                             200 => -1,
@@ -141,7 +141,7 @@ class MongoCollection implements ProviderInterface
                     'DELETE' => [
                         'active' => true,
                         'public' => false,
-                        'description' => 'Deletes an existing entity',
+                        'description' => 'Deletes an existing document',
                         'responses' => [
                             200 => -1,
                         ],
@@ -160,6 +160,6 @@ class MongoCollection implements ProviderInterface
 
     private function getPrefix(string $path): string
     {
-        return implode('-', array_map('ucfirst', array_filter(explode('/', $path))));
+        return implode('_', array_map('ucfirst', array_filter(explode('/', $path))));
     }
 }

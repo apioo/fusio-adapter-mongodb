@@ -54,7 +54,7 @@ class MongoUpdateOne extends MongoAbstract
 
         return $this->response->build(200, [], [
             'success' => true,
-            'message' => 'Entry successful updated'
+            'message' => 'Document successful updated'
         ]);
     }
 }
