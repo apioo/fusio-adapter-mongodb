@@ -25,9 +25,6 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use PSX\Http\Environment\HttpResponseInterface;
-use PSX\Http\Exception\BadRequestException;
-use PSX\Record\RecordInterface;
-use PSX\Record\Transformer;
 
 /**
  * MongoInsertOne
