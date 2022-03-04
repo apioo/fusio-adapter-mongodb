@@ -51,7 +51,7 @@ class MongoInsertOne extends MongoAbstract
 
         return $this->response->build(201, [], [
             'success' => true,
-            'message' => 'Document successful created',
+            'message' => 'Document successfully created',
             'id'      => (string) $result->getInsertedId()
         ]);
     }

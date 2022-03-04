@@ -60,7 +60,7 @@ class MongoInsertOneTest extends MongoTestCase
 
         $result = [
             'success' => true,
-            'message' => 'Entry successful created',
+            'message' => 'Document successfully created',
             'id'      => (string) $row['_id']
         ];
 

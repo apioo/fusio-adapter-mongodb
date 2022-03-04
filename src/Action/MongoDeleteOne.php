@@ -52,7 +52,7 @@ class MongoDeleteOne extends MongoAbstract
 
         return $this->response->build(200, [], [
             'success' => true,
-            'message' => 'Entry successful deleted'
+            'message' => 'Document successfully deleted'
         ]);
     }
 }

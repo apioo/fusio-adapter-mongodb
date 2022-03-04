@@ -60,7 +60,7 @@ class MongoUpdateOneTest extends MongoTestCase
 
         $result = [
             'success' => true,
-            'message' => 'Entry successful updated',
+            'message' => 'Document successfully updated',
         ];
 
         $this->assertInstanceOf(HttpResponseInterface::class, $response);

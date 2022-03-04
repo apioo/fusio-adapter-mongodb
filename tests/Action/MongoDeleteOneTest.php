@@ -48,7 +48,7 @@ class MongoDeleteOneTest extends MongoTestCase
 
         $result = [
             'success' => true,
-            'message' => 'Entry successful deleted',
+            'message' => 'Document successfully deleted',
         ];
 
         $this->assertInstanceOf(HttpResponseInterface::class, $response);
