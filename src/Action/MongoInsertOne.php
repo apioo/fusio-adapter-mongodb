@@ -25,6 +25,8 @@ use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use PSX\Http\Environment\HttpResponseInterface;
+use PSX\Http\Exception\BadRequestException;
+use PSX\Record\RecordInterface;
 use PSX\Record\Transformer;
 
 /**
@@ -46,7 +48,7 @@ class MongoInsertOne extends MongoAbstract
         $connection = $this->getConnection($configuration);
         $collection = $connection->selectCollection($this->getCollection($configuration));
 
-        $body   = $request->getPayload();
+        $body   = $this->toStdClass($request->getPayload());
         $result = $collection->insertOne($body);
 
         return $this->response->build(201, [], [

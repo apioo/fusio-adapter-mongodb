@@ -27,6 +27,8 @@ use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use MongoDB;
+use PSX\Http\Exception\BadRequestException;
+use PSX\Record\RecordInterface;
 
 /**
  * MongoAbstract
@@ -61,5 +63,18 @@ abstract class MongoAbstract extends ActionAbstract
         }
 
         return $collection;
+    }
+
+    protected function toStdClass($body): \stdClass
+    {
+        if ($body instanceof \stdClass) {
+            return $body;
+        } elseif (is_array($body)) {
+            return (object) $body;
+        } elseif ($body instanceof RecordInterface) {
+            return json_decode(json_encode($body));
+        } else {
+            throw new BadRequestException('Provided an invalid request body');
+        }
     }
 }

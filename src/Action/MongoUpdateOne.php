@@ -26,6 +26,8 @@ use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
 use MongoDB;
 use PSX\Http\Environment\HttpResponseInterface;
+use PSX\Http\Exception\BadRequestException;
+use PSX\Record\RecordInterface;
 use PSX\Record\Transformer;
 
 /**
@@ -48,7 +50,7 @@ class MongoUpdateOne extends MongoAbstract
         $collection = $connection->selectCollection($this->getCollection($configuration));
 
         $id   = $request->get('id');
-        $body = $request->getPayload();
+        $body = $this->toStdClass($request->getPayload());
 
         $collection->updateOne(['_id' => new MongoDB\BSON\ObjectID($id)], ['$set' => $body]);
 
