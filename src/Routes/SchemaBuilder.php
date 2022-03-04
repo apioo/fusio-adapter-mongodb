@@ -37,6 +37,6 @@ class SchemaBuilder
 
     private function readSchema(string $file)
     {
-        return \json_decode(\file_get_contents($file));
+        return \json_decode(\file_get_contents($file), true);
     }
 }
