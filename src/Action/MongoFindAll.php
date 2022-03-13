@@ -45,12 +45,12 @@ class MongoFindAll extends MongoAbstract
         $connection = $this->getConnection($configuration);
         $collection = $connection->selectCollection($this->getCollection($configuration));
 
-        $startIndex  = (int) $request->getParameter('startIndex');
-        $count       = (int) $request->getParameter('count');
-        $sortBy      = $request->getParameter('sortBy');
-        $sortOrder   = $request->getParameter('sortOrder');
-        $filterBy    = $request->getParameter('filterBy');
-        $filterValue = $request->getParameter('filterValue');
+        $startIndex  = (int) $request->get('startIndex');
+        $count       = (int) $request->get('count');
+        $sortBy      = $request->get('sortBy');
+        $sortOrder   = $request->get('sortOrder');
+        $filterBy    = $request->get('filterBy');
+        $filterValue = $request->get('filterValue');
 
         $startIndex  = $startIndex < 0 ? 0 : $startIndex;
         $count       = $count >= 1 && $count <= 32 ? $count : 16;
