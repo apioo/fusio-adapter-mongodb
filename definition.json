@@ -9,7 +9,7 @@
   "connectionClass": [
     "Fusio\\Adapter\\Mongodb\\Connection\\MongoDB"
   ],
-  "routesClass": [
-    "Fusio\\Adapter\\Mongodb\\Routes\\MongoCollection"
+  "generatorClass": [
+    "Fusio\\Adapter\\Mongodb\\Generator\\MongoCollection"
   ]
 }
