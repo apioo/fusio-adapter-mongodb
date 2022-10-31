@@ -59,30 +59,29 @@ class MongoCollection implements ProviderInterface
 
     public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration): void
     {
-        $prefix = $this->getPrefix($basePath);
         $schemaParameters = $setup->addSchema('Mongo_Collection_Parameters', $this->schemaBuilder->getParameters());
 
-        $fetchAllAction = $setup->addAction($prefix . '_Find_All', MongoFindAll::class, PhpClass::class, [
+        $fetchAllAction = $setup->addAction('Mongo_Find_All', MongoFindAll::class, PhpClass::class, [
             'connection' => $configuration->get('connection'),
             'collection' => $configuration->get('collection'),
         ]);
 
-        $fetchRowAction = $setup->addAction($prefix . '_Find_Row', MongoFindOne::class, PhpClass::class, [
+        $fetchRowAction = $setup->addAction('Mongo_Find_Row', MongoFindOne::class, PhpClass::class, [
             'connection' => $configuration->get('connection'),
             'collection' => $configuration->get('collection'),
         ]);
 
-        $deleteAction = $setup->addAction($prefix . '_Delete', MongoDeleteOne::class, PhpClass::class, [
+        $deleteAction = $setup->addAction('Mongo_Delete', MongoDeleteOne::class, PhpClass::class, [
             'connection' => $configuration->get('connection'),
             'collection' => $configuration->get('collection'),
         ]);
 
-        $insertAction = $setup->addAction($prefix . '_Insert', MongoInsertOne::class, PhpClass::class, [
+        $insertAction = $setup->addAction('Mongo_Insert', MongoInsertOne::class, PhpClass::class, [
             'connection' => $configuration->get('connection'),
             'collection' => $configuration->get('collection'),
         ]);
 
-        $updateAction = $setup->addAction($prefix . '_Update', MongoUpdateOne::class, PhpClass::class, [
+        $updateAction = $setup->addAction('Mongo_Update', MongoUpdateOne::class, PhpClass::class, [
             'connection' => $configuration->get('connection'),
             'collection' => $configuration->get('collection'),
         ]);
@@ -156,10 +155,5 @@ class MongoCollection implements ProviderInterface
     {
         $builder->add($elementFactory->newConnection('connection', 'Connection', 'The mongo connection which should be used'));
         $builder->add($elementFactory->newInput('collection', 'Collection', 'text', 'Name of the collection'));
-    }
-
-    private function getPrefix(string $path): string
-    {
-        return implode('_', array_map('ucfirst', array_filter(explode('/', $path))));
     }
 }
