@@ -22,6 +22,7 @@
 namespace Fusio\Adapter\Mongodb\Tests\Connection;
 
 use Fusio\Adapter\Mongodb\Connection\MongoDB;
+use Fusio\Adapter\Mongodb\Tests\MongoTestCase;
 use Fusio\Engine\Connection\PingableInterface;
 use Fusio\Engine\Form\Builder;
 use Fusio\Engine\Form\Container;
@@ -38,10 +39,8 @@ use PHPUnit\Framework\TestCase;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org/
  */
-class MongoDBTest extends TestCase
+class MongoDBTest extends MongoTestCase
 {
-    use EngineTestCaseTrait;
-
     public function testGetConnection()
     {
         /** @var MongoDB $connectionFactory */
