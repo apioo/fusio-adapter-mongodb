@@ -31,6 +31,7 @@ use MongoDB\Client;
 use MongoDB\Database;
 use MongoDB\Exception\Exception;
 use MongoDB\Driver;
+use MongoDB\Model\BSONDocument;
 
 /**
  * MongoDB
@@ -78,9 +79,7 @@ class MongoDB implements ConnectionInterface, PingableInterface
                 $cursor   = $connection->command(['ping' => 1]);
                 $response = $cursor->toArray()[0] ?? null;
 
-                throw new \RuntimeException(var_export($response, true));
-
-                return is_array($response) && isset($response['ok']) && $response['ok'] == 1;
+                return $response instanceof BSONDocument && isset($response['ok']) && $response['ok'] == 1;
             } catch(Exception $e) {
             }
         }
