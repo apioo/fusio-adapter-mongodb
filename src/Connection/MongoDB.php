@@ -78,7 +78,7 @@ class MongoDB implements ConnectionInterface, PingableInterface
                 $cursor   = $connection->command(['ping' => 1]);
                 $response = $cursor->toArray()[0] ?? null;
 
-                return $response instanceof \stdClass && isset($response->ok) && $response->ok == 1;
+                return is_array($response) && isset($response['ok']) && $response['ok'] == 1;
             } catch(Exception $e) {
             }
         }
