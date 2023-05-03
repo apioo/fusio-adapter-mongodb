@@ -65,7 +65,7 @@ abstract class MongoAbstract extends ActionAbstract
         return $collection;
     }
 
-    protected function toStdClass($body): \stdClass
+    protected function toStdClass(mixed $body): object
     {
         if ($body instanceof \stdClass) {
             return $body;
