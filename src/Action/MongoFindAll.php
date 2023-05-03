@@ -74,9 +74,7 @@ class MongoFindAll extends MongoAbstract
             $options['skip'] = $startIndex;
         }
 
-        if (!empty($count)) {
-            $options['limit'] = $count;
-        }
+        $options['limit'] = $count;
 
         $totalCount = $collection->countDocuments($filter);
         $cursor     = $collection->find($filter, $options);
