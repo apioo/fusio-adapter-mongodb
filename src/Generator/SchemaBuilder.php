@@ -30,12 +30,12 @@ namespace Fusio\Adapter\Mongodb\Generator;
  */
 class SchemaBuilder
 {
-    public function getParameters()
+    public function getParameters(): array
     {
         return $this->readSchema(__DIR__ . '/schema/mongo-collection/parameters.json');
     }
 
-    private function readSchema(string $file)
+    private function readSchema(string $file): array
     {
         return \json_decode(\file_get_contents($file), true);
     }

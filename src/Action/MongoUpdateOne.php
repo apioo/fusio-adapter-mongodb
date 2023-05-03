@@ -49,7 +49,7 @@ class MongoUpdateOne extends MongoAbstract
         $id   = $request->get('id');
         $body = $this->toStdClass($request->getPayload());
 
-        $collection->updateOne(['_id' => new MongoDB\BSON\ObjectID($id)], ['$set' => $body]);
+        $collection->updateOne(['_id' => new MongoDB\BSON\ObjectId($id)], ['$set' => $body]);
 
         return $this->response->build(200, [], [
             'success' => true,

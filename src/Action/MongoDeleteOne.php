@@ -48,7 +48,7 @@ class MongoDeleteOne extends MongoAbstract
 
         $id = $request->get('id');
 
-        $collection->deleteOne(['_id' => new MongoDB\BSON\ObjectID($id)]);
+        $collection->deleteOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
 
         return $this->response->build(200, [], [
             'success' => true,
