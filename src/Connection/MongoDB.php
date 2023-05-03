@@ -78,6 +78,8 @@ class MongoDB implements ConnectionInterface, PingableInterface
                 $cursor   = $connection->command(['ping' => 1]);
                 $response = $cursor->toArray()[0] ?? null;
 
+                throw new \RuntimeException(var_export($response, true));
+
                 return is_array($response) && isset($response['ok']) && $response['ok'] == 1;
             } catch(Exception $e) {
             }
