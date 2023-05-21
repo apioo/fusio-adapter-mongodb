@@ -22,6 +22,7 @@
 namespace Fusio\Adapter\Mongodb\Connection;
 
 use Fusio\Engine\Connection\PingableInterface;
+use Fusio\Engine\ConnectionAbstract;
 use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Exception\ConfigurationException;
 use Fusio\Engine\Form\BuilderInterface;
@@ -40,11 +41,11 @@ use MongoDB\Model\BSONDocument;
  * @license http://www.gnu.org/licenses/agpl-3.0
  * @link    https://www.fusio-project.org/
  */
-class MongoDB implements ConnectionInterface, PingableInterface
+class MongoDB extends ConnectionAbstract implements PingableInterface
 {
     public function getName(): string
     {
-        return 'Mongo-DB';
+        return 'MongoDB';
     }
 
     public function getConnection(ParametersInterface $config): Database
