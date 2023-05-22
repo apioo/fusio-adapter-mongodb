@@ -39,7 +39,7 @@ class MongoFindOne extends MongoAbstract
 {
     public function getName(): string
     {
-        return 'Mongo-Find-One';
+        return 'MongoDB-Find-One';
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface

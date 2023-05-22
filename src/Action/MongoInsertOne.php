@@ -37,7 +37,7 @@ class MongoInsertOne extends MongoAbstract
 {
     public function getName(): string
     {
-        return 'Mongo-Insert-One';
+        return 'MongoDB-Insert-One';
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface

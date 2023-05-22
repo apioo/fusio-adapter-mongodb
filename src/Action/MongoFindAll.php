@@ -37,7 +37,7 @@ class MongoFindAll extends MongoAbstract
 {
     public function getName(): string
     {
-        return 'Mongo-Find-All';
+        return 'MongoDB-Find-All';
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface

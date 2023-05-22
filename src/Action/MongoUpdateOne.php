@@ -38,7 +38,7 @@ class MongoUpdateOne extends MongoAbstract
 {
     public function getName(): string
     {
-        return 'Mongo-Update-One';
+        return 'MongoDB-Update-One';
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface

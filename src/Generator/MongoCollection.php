@@ -26,13 +26,17 @@ use Fusio\Adapter\Mongodb\Action\MongoFindAll;
 use Fusio\Adapter\Mongodb\Action\MongoFindOne;
 use Fusio\Adapter\Mongodb\Action\MongoInsertOne;
 use Fusio\Adapter\Mongodb\Action\MongoUpdateOne;
-use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
-use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\Generator\ProviderInterface;
 use Fusio\Engine\Generator\SetupInterface;
+use Fusio\Engine\ParametersInterface;
+use Fusio\Engine\Schema\SchemaBuilder;
+use Fusio\Engine\Schema\SchemaName;
+use Fusio\Model\Backend\Action;
+use Fusio\Model\Backend\ActionConfig;
+use Fusio\Model\Backend\Operation;
 
 /**
  * MongoCollection
@@ -43,117 +47,168 @@ use Fusio\Engine\Generator\SetupInterface;
  */
 class MongoCollection implements ProviderInterface
 {
-    private ConnectorInterface $connector;
-    private SchemaBuilder $schemaBuilder;
-
-    public function __construct(ConnectorInterface $connector)
-    {
-        $this->connector = $connector;
-        $this->schemaBuilder = new SchemaBuilder();
-    }
+    private const ACTION_GET_ALL = 'MongoDB_GetAll';
+    private const ACTION_GET = 'MongoDB_Get';
+    private const ACTION_INSERT = 'MongoDB_Insert';
+    private const ACTION_UPDATE = 'MongoDB_Update';
+    private const ACTION_DELETE = 'MongoDB_Delete';
 
     public function getName(): string
     {
-        return 'Mongo-Collection';
+        return 'MongoDB-Collection';
     }
 
     public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration): void
     {
-        $schemaParameters = $setup->addSchema('Mongo_Collection_Parameters', $this->schemaBuilder->getParameters());
+        $setup->addAction($this->makeGetAllAction($configuration));
+        $setup->addAction($this->makeGetAction($configuration));
+        $setup->addAction($this->makeInsertAction($configuration));
+        $setup->addAction($this->makeUpdateAction($configuration));
+        $setup->addAction($this->makeDeleteAction($configuration));
 
-        $fetchAllAction = $setup->addAction('Mongo_Find_All', MongoFindAll::class, PhpClass::class, [
-            'connection' => $configuration->get('connection'),
-            'collection' => $configuration->get('collection'),
-        ]);
-
-        $fetchRowAction = $setup->addAction('Mongo_Find_Row', MongoFindOne::class, PhpClass::class, [
-            'connection' => $configuration->get('connection'),
-            'collection' => $configuration->get('collection'),
-        ]);
-
-        $deleteAction = $setup->addAction('Mongo_Delete', MongoDeleteOne::class, PhpClass::class, [
-            'connection' => $configuration->get('connection'),
-            'collection' => $configuration->get('collection'),
-        ]);
-
-        $insertAction = $setup->addAction('Mongo_Insert', MongoInsertOne::class, PhpClass::class, [
-            'connection' => $configuration->get('connection'),
-            'collection' => $configuration->get('collection'),
-        ]);
-
-        $updateAction = $setup->addAction('Mongo_Update', MongoUpdateOne::class, PhpClass::class, [
-            'connection' => $configuration->get('connection'),
-            'collection' => $configuration->get('collection'),
-        ]);
-
-        $setup->addRoute(1, '/', 'Fusio\Impl\Controller\SchemaApiController', [], [
-            [
-                'version' => 1,
-                'methods' => [
-                    'GET' => [
-                        'active' => true,
-                        'public' => true,
-                        'description' => 'Returns a collection of documents',
-                        'parameters' => $schemaParameters,
-                        'responses' => [
-                            200 => -1,
-                        ],
-                        'action' => $fetchAllAction,
-                    ],
-                    'POST' => [
-                        'active' => true,
-                        'public' => false,
-                        'description' => 'Creates a new document',
-                        'request' => -1,
-                        'responses' => [
-                            201 => -1,
-                        ],
-                        'action' => $insertAction,
-                    ]
-                ],
-            ]
-        ]);
-
-        $setup->addRoute(1, '/:id', 'Fusio\Impl\Controller\SchemaApiController', [], [
-            [
-                'version' => 1,
-                'methods' => [
-                    'GET' => [
-                        'active' => true,
-                        'public' => true,
-                        'description' => 'Returns a single document',
-                        'responses' => [
-                            200 => -1,
-                        ],
-                        'action' => $fetchRowAction,
-                    ],
-                    'PUT' => [
-                        'active' => true,
-                        'public' => false,
-                        'description' => 'Updates an existing document',
-                        'request' => -1,
-                        'responses' => [
-                            200 => -1,
-                        ],
-                        'action' => $updateAction,
-                    ],
-                    'DELETE' => [
-                        'active' => true,
-                        'public' => false,
-                        'description' => 'Deletes an existing document',
-                        'responses' => [
-                            200 => -1,
-                        ],
-                        'action' => $deleteAction,
-                    ]
-                ],
-            ]
-        ]);
+        $setup->addOperation($this->makeGetAllOperation());
+        $setup->addOperation($this->makeGetOperation());
+        $setup->addOperation($this->makeInsertOperation());
+        $setup->addOperation($this->makeUpdateOperation());
+        $setup->addOperation($this->makeDeleteOperation());
     }
 
     public function configure(BuilderInterface $builder, ElementFactoryInterface $elementFactory): void
     {
         $builder->add($elementFactory->newConnection('connection', 'Connection', 'The mongo connection which should be used'));
         $builder->add($elementFactory->newInput('collection', 'Collection', 'text', 'Name of the collection'));
+    }
+
+    private function makeGetAllAction(ParametersInterface $configuration): Action
+    {
+        $action = new Action();
+        $action->setName(self::ACTION_GET_ALL);
+        $action->setClass(MongoFindAll::class);
+        $action->setEngine(PhpClass::class);
+        $action->setConfig(ActionConfig::fromArray([
+            'connection' => $configuration->get('connection'),
+            'collection' => $configuration->get('collection'),
+        ]));
+        return $action;
+    }
+
+    private function makeGetAction(ParametersInterface $configuration): Action
+    {
+        $action = new Action();
+        $action->setName(self::ACTION_GET);
+        $action->setClass(MongoFindOne::class);
+        $action->setEngine(PhpClass::class);
+        $action->setConfig(ActionConfig::fromArray([
+            'connection' => $configuration->get('connection'),
+            'collection' => $configuration->get('collection'),
+        ]));
+        return $action;
+    }
+
+    private function makeInsertAction(ParametersInterface $configuration): Action
+    {
+        $action = new Action();
+        $action->setName(self::ACTION_INSERT);
+        $action->setClass(MongoInsertOne::class);
+        $action->setEngine(PhpClass::class);
+        $action->setConfig(ActionConfig::fromArray([
+            'connection' => $configuration->get('connection'),
+            'collection' => $configuration->get('collection'),
+        ]));
+        return $action;
+    }
+
+    private function makeUpdateAction(ParametersInterface $configuration): Action
+    {
+        $action = new Action();
+        $action->setName(self::ACTION_UPDATE);
+        $action->setClass(MongoUpdateOne::class);
+        $action->setEngine(PhpClass::class);
+        $action->setConfig(ActionConfig::fromArray([
+            'connection' => $configuration->get('connection'),
+            'collection' => $configuration->get('collection'),
+        ]));
+        return $action;
+    }
+
+    private function makeDeleteAction(ParametersInterface $configuration): Action
+    {
+        $action = new Action();
+        $action->setName(self::ACTION_DELETE);
+        $action->setClass(MongoDeleteOne::class);
+        $action->setEngine(PhpClass::class);
+        $action->setConfig(ActionConfig::fromArray([
+            'connection' => $configuration->get('connection'),
+            'collection' => $configuration->get('collection'),
+        ]));
+        return $action;
+    }
+
+    private function makeGetAllOperation(): Operation
+    {
+        $operation = new Operation();
+        $operation->setName('getAll');
+        $operation->setDescription('Returns a collection of documents');
+        $operation->setHttpMethod('GET');
+        $operation->setHttpPath('/');
+        $operation->setHttpCode(200);
+        $operation->setParameters(SchemaBuilder::makeCollectionParameters());
+        $operation->setOutgoing(SchemaName::PASSTHRU);
+        $operation->setAction(self::ACTION_GET_ALL);
+        return $operation;
+    }
+
+    private function makeGetOperation(): Operation
+    {
+        $operation = new Operation();
+        $operation->setName('get');
+        $operation->setDescription('Returns a single document');
+        $operation->setHttpMethod('GET');
+        $operation->setHttpPath('/:id');
+        $operation->setHttpCode(200);
+        $operation->setOutgoing(SchemaName::PASSTHRU);
+        $operation->setAction(self::ACTION_GET);
+        return $operation;
+    }
+
+    private function makeInsertOperation(): Operation
+    {
+        $operation = new Operation();
+        $operation->setName('insert');
+        $operation->setDescription('Creates a new document');
+        $operation->setHttpMethod('POST');
+        $operation->setHttpPath('/');
+        $operation->setHttpCode(200);
+        $operation->setIncoming(SchemaName::PASSTHRU);
+        $operation->setOutgoing(SchemaName::MESSAGE);
+        $operation->setAction(self::ACTION_INSERT);
+        return $operation;
+    }
+
+    private function makeUpdateOperation(): Operation
+    {
+        $operation = new Operation();
+        $operation->setName('update');
+        $operation->setDescription('Updates an existing document');
+        $operation->setHttpMethod('PUT');
+        $operation->setHttpPath('/:id');
+        $operation->setHttpCode(200);
+        $operation->setIncoming(SchemaName::PASSTHRU);
+        $operation->setOutgoing(SchemaName::MESSAGE);
+        $operation->setAction(self::ACTION_UPDATE);
+        return $operation;
+    }
+
+    private function makeDeleteOperation(): Operation
+    {
+        $operation = new Operation();
+        $operation->setName('delete');
+        $operation->setDescription('Deletes an existing document');
+        $operation->setHttpMethod('DELETE');
+        $operation->setHttpPath('/:id');
+        $operation->setHttpCode(200);
+        $operation->setOutgoing(SchemaName::MESSAGE);
+        $operation->setAction(self::ACTION_DELETE);
+        return $operation;
     }
 }

@@ -38,7 +38,7 @@ class MongoDeleteOne extends MongoAbstract
 {
     public function getName(): string
     {
-        return 'Mongo-Delete-One';
+        return 'MongoDB-Delete-One';
     }
 
     public function handle(RequestInterface $request, ParametersInterface $configuration, ContextInterface $context): HttpResponseInterface
