@@ -37,6 +37,7 @@ use Fusio\Engine\Schema\SchemaName;
 use Fusio\Model\Backend\Action;
 use Fusio\Model\Backend\ActionConfig;
 use Fusio\Model\Backend\Operation;
+use Fusio\Model\Backend\Schema;
 
 /**
  * MongoCollection
@@ -47,6 +48,7 @@ use Fusio\Model\Backend\Operation;
  */
 class MongoCollection implements ProviderInterface
 {
+    private const SCHEMA_GET_ALL = 'MongoDB_GetAll';
     private const ACTION_GET_ALL = 'MongoDB_GetAll';
     private const ACTION_GET = 'MongoDB_Get';
     private const ACTION_INSERT = 'MongoDB_Insert';
@@ -60,6 +62,8 @@ class MongoCollection implements ProviderInterface
 
     public function setup(SetupInterface $setup, string $basePath, ParametersInterface $configuration): void
     {
+        $setup->addSchema($this->makeGetAllSchema());
+
         $setup->addAction($this->makeGetAllAction($configuration));
         $setup->addAction($this->makeGetAction($configuration));
         $setup->addAction($this->makeInsertAction($configuration));
@@ -77,6 +81,14 @@ class MongoCollection implements ProviderInterface
     {
         $builder->add($elementFactory->newConnection('connection', 'Connection', 'The mongo connection which should be used'));
         $builder->add($elementFactory->newInput('collection', 'Collection', 'text', 'Name of the collection'));
+    }
+
+    private function makeGetAllSchema(): Schema
+    {
+        $schema = new Schema();
+        $schema->setName(self::SCHEMA_GET_ALL);
+        $schema->setSource(SchemaBuilder::makeCollectionResponse(self::SCHEMA_GET_ALL, null));
+        return $schema;
     }
 
     private function makeGetAllAction(ParametersInterface $configuration): Action
@@ -153,7 +165,7 @@ class MongoCollection implements ProviderInterface
         $operation->setHttpPath('/');
         $operation->setHttpCode(200);
         $operation->setParameters(SchemaBuilder::makeCollectionParameters());
-        $operation->setOutgoing(SchemaName::PASSTHRU);
+        $operation->setOutgoing(self::SCHEMA_GET_ALL);
         $operation->setAction(self::ACTION_GET_ALL);
         return $operation;
     }
