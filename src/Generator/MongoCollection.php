@@ -34,10 +34,10 @@ use Fusio\Engine\Generator\SetupInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\Schema\SchemaBuilder;
 use Fusio\Engine\Schema\SchemaName;
-use Fusio\Model\Backend\Action;
 use Fusio\Model\Backend\ActionConfig;
-use Fusio\Model\Backend\Operation;
-use Fusio\Model\Backend\Schema;
+use Fusio\Model\Backend\ActionCreate;
+use Fusio\Model\Backend\OperationCreate;
+use Fusio\Model\Backend\SchemaCreate;
 
 /**
  * MongoCollection
@@ -83,17 +83,17 @@ class MongoCollection implements ProviderInterface
         $builder->add($elementFactory->newInput('collection', 'Collection', 'text', 'Name of the collection'));
     }
 
-    private function makeGetAllSchema(): Schema
+    private function makeGetAllSchema(): SchemaCreate
     {
-        $schema = new Schema();
+        $schema = new SchemaCreate();
         $schema->setName(self::SCHEMA_GET_ALL);
         $schema->setSource(SchemaBuilder::makeCollectionResponse(self::SCHEMA_GET_ALL, null));
         return $schema;
     }
 
-    private function makeGetAllAction(ParametersInterface $configuration): Action
+    private function makeGetAllAction(ParametersInterface $configuration): ActionCreate
     {
-        $action = new Action();
+        $action = new ActionCreate();
         $action->setName(self::ACTION_GET_ALL);
         $action->setClass(MongoFindAll::class);
         $action->setEngine(PhpClass::class);
@@ -104,9 +104,9 @@ class MongoCollection implements ProviderInterface
         return $action;
     }
 
-    private function makeGetAction(ParametersInterface $configuration): Action
+    private function makeGetAction(ParametersInterface $configuration): ActionCreate
     {
-        $action = new Action();
+        $action = new ActionCreate();
         $action->setName(self::ACTION_GET);
         $action->setClass(MongoFindOne::class);
         $action->setEngine(PhpClass::class);
@@ -117,9 +117,9 @@ class MongoCollection implements ProviderInterface
         return $action;
     }
 
-    private function makeInsertAction(ParametersInterface $configuration): Action
+    private function makeInsertAction(ParametersInterface $configuration): ActionCreate
     {
-        $action = new Action();
+        $action = new ActionCreate();
         $action->setName(self::ACTION_INSERT);
         $action->setClass(MongoInsertOne::class);
         $action->setEngine(PhpClass::class);
@@ -130,9 +130,9 @@ class MongoCollection implements ProviderInterface
         return $action;
     }
 
-    private function makeUpdateAction(ParametersInterface $configuration): Action
+    private function makeUpdateAction(ParametersInterface $configuration): ActionCreate
     {
-        $action = new Action();
+        $action = new ActionCreate();
         $action->setName(self::ACTION_UPDATE);
         $action->setClass(MongoUpdateOne::class);
         $action->setEngine(PhpClass::class);
@@ -143,9 +143,9 @@ class MongoCollection implements ProviderInterface
         return $action;
     }
 
-    private function makeDeleteAction(ParametersInterface $configuration): Action
+    private function makeDeleteAction(ParametersInterface $configuration): ActionCreate
     {
-        $action = new Action();
+        $action = new ActionCreate();
         $action->setName(self::ACTION_DELETE);
         $action->setClass(MongoDeleteOne::class);
         $action->setEngine(PhpClass::class);
@@ -156,9 +156,9 @@ class MongoCollection implements ProviderInterface
         return $action;
     }
 
-    private function makeGetAllOperation(): Operation
+    private function makeGetAllOperation(): OperationCreate
     {
-        $operation = new Operation();
+        $operation = new OperationCreate();
         $operation->setName('getAll');
         $operation->setDescription('Returns a collection of documents');
         $operation->setHttpMethod('GET');
@@ -170,9 +170,9 @@ class MongoCollection implements ProviderInterface
         return $operation;
     }
 
-    private function makeGetOperation(): Operation
+    private function makeGetOperation(): OperationCreate
     {
-        $operation = new Operation();
+        $operation = new OperationCreate();
         $operation->setName('get');
         $operation->setDescription('Returns a single document');
         $operation->setHttpMethod('GET');
@@ -183,9 +183,9 @@ class MongoCollection implements ProviderInterface
         return $operation;
     }
 
-    private function makeInsertOperation(): Operation
+    private function makeInsertOperation(): OperationCreate
     {
-        $operation = new Operation();
+        $operation = new OperationCreate();
         $operation->setName('insert');
         $operation->setDescription('Creates a new document');
         $operation->setHttpMethod('POST');
@@ -197,9 +197,9 @@ class MongoCollection implements ProviderInterface
         return $operation;
     }
 
-    private function makeUpdateOperation(): Operation
+    private function makeUpdateOperation(): OperationCreate
     {
-        $operation = new Operation();
+        $operation = new OperationCreate();
         $operation->setName('update');
         $operation->setDescription('Updates an existing document');
         $operation->setHttpMethod('PUT');
@@ -211,9 +211,9 @@ class MongoCollection implements ProviderInterface
         return $operation;
     }
 
-    private function makeDeleteOperation(): Operation
+    private function makeDeleteOperation(): OperationCreate
     {
-        $operation = new Operation();
+        $operation = new OperationCreate();
         $operation->setName('delete');
         $operation->setDescription('Deletes an existing document');
         $operation->setHttpMethod('DELETE');
