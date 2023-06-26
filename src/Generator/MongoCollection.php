@@ -96,7 +96,6 @@ class MongoCollection implements ProviderInterface
         $action = new ActionCreate();
         $action->setName(self::ACTION_GET_ALL);
         $action->setClass(MongoFindAll::class);
-        $action->setEngine(PhpClass::class);
         $action->setConfig(ActionConfig::fromArray([
             'connection' => $configuration->get('connection'),
             'collection' => $configuration->get('collection'),
@@ -109,7 +108,6 @@ class MongoCollection implements ProviderInterface
         $action = new ActionCreate();
         $action->setName(self::ACTION_GET);
         $action->setClass(MongoFindOne::class);
-        $action->setEngine(PhpClass::class);
         $action->setConfig(ActionConfig::fromArray([
             'connection' => $configuration->get('connection'),
             'collection' => $configuration->get('collection'),
@@ -122,7 +120,6 @@ class MongoCollection implements ProviderInterface
         $action = new ActionCreate();
         $action->setName(self::ACTION_INSERT);
         $action->setClass(MongoInsertOne::class);
-        $action->setEngine(PhpClass::class);
         $action->setConfig(ActionConfig::fromArray([
             'connection' => $configuration->get('connection'),
             'collection' => $configuration->get('collection'),
@@ -135,7 +132,6 @@ class MongoCollection implements ProviderInterface
         $action = new ActionCreate();
         $action->setName(self::ACTION_UPDATE);
         $action->setClass(MongoUpdateOne::class);
-        $action->setEngine(PhpClass::class);
         $action->setConfig(ActionConfig::fromArray([
             'connection' => $configuration->get('connection'),
             'collection' => $configuration->get('collection'),
@@ -148,7 +144,6 @@ class MongoCollection implements ProviderInterface
         $action = new ActionCreate();
         $action->setName(self::ACTION_DELETE);
         $action->setClass(MongoDeleteOne::class);
-        $action->setEngine(PhpClass::class);
         $action->setConfig(ActionConfig::fromArray([
             'connection' => $configuration->get('connection'),
             'collection' => $configuration->get('collection'),
