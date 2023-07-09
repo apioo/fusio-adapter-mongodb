@@ -26,7 +26,6 @@ use Fusio\Adapter\Mongodb\Action\MongoFindAll;
 use Fusio\Adapter\Mongodb\Action\MongoFindOne;
 use Fusio\Adapter\Mongodb\Action\MongoInsertOne;
 use Fusio\Adapter\Mongodb\Action\MongoUpdateOne;
-use Fusio\Engine\Factory\Resolver\PhpClass;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\Generator\ProviderInterface;

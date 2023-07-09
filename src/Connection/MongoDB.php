@@ -23,7 +23,6 @@ namespace Fusio\Adapter\Mongodb\Connection;
 
 use Fusio\Engine\Connection\PingableInterface;
 use Fusio\Engine\ConnectionAbstract;
-use Fusio\Engine\ConnectionInterface;
 use Fusio\Engine\Exception\ConfigurationException;
 use Fusio\Engine\Form\BuilderInterface;
 use Fusio\Engine\Form\ElementFactoryInterface;
@@ -31,7 +30,6 @@ use Fusio\Engine\ParametersInterface;
 use MongoDB\Client;
 use MongoDB\Database;
 use MongoDB\Exception\Exception;
-use MongoDB\Driver;
 use MongoDB\Model\BSONDocument;
 
 /**

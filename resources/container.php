@@ -6,6 +6,7 @@ use Fusio\Adapter\Mongodb\Action\MongoFindOne;
 use Fusio\Adapter\Mongodb\Action\MongoInsertOne;
 use Fusio\Adapter\Mongodb\Action\MongoUpdateOne;
 use Fusio\Adapter\Mongodb\Connection\MongoDB;
+use Fusio\Adapter\Mongodb\Generator\MongoCollection;
 use Fusio\Engine\Adapter\ServiceBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
