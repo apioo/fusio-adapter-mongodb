@@ -21,23 +21,14 @@
 
 namespace Fusio\Adapter\Mongodb\Tests;
 
-use Fusio\Adapter\Ldap\Connection\Ldap;
-use Fusio\Adapter\Mongodb\Action\MongoDeleteOne;
-use Fusio\Adapter\Mongodb\Action\MongoFindAll;
-use Fusio\Adapter\Mongodb\Action\MongoFindOne;
-use Fusio\Adapter\Mongodb\Action\MongoInsertOne;
-use Fusio\Adapter\Mongodb\Action\MongoUpdateOne;
+use Fusio\Adapter\Mongodb\Adapter;
 use Fusio\Adapter\Mongodb\Connection\MongoDB;
-use Fusio\Adapter\Mongodb\Generator\MongoCollection;
-use Fusio\Engine\Action\Runtime;
-use Fusio\Engine\ConnectorInterface;
 use Fusio\Engine\Model\Connection;
 use Fusio\Engine\Parameters;
 use Fusio\Engine\Test\CallbackConnection;
 use Fusio\Engine\Test\EngineTestCaseTrait;
 use MongoDB\Database;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\DependencyInjection\Container;
 
 /**
  * MongoTestCase
@@ -51,17 +42,6 @@ abstract class MongoTestCase extends TestCase
     use EngineTestCaseTrait;
 
     protected ?Database $connection = null;
-
-    protected function configure(Runtime $runtime, Container $container): void
-    {
-        $container->set(MongoDB::class, new MongoDB());
-        $container->set(MongoDeleteOne::class, new MongoDeleteOne($runtime));
-        $container->set(MongoFindAll::class, new MongoFindAll($runtime));
-        $container->set(MongoFindOne::class, new MongoFindOne($runtime));
-        $container->set(MongoInsertOne::class, new MongoInsertOne($runtime));
-        $container->set(MongoUpdateOne::class, new MongoUpdateOne($runtime));
-        $container->set(MongoCollection::class, new MongoCollection($container->get(ConnectorInterface::class)));
-    }
 
     protected function setUp(): void
     {
@@ -142,5 +122,10 @@ abstract class MongoTestCase extends TestCase
         ];
 
         return $result;
+    }
+
+    protected function getAdapterClass(): string
+    {
+        return Adapter::class;
     }
 }
