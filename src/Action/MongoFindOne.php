@@ -50,7 +50,7 @@ class MongoFindOne extends MongoAbstract
         $id  = $request->get('id');
         $row = $collection->findOne(['_id' => new MongoDB\BSON\ObjectId($id)]);
 
-        if (empty($row)) {
+        if ($row === null) {
             throw new StatusCode\NotFoundException('Document not available');
         }
 
