@@ -28,6 +28,7 @@ use Fusio\Engine\Form\ElementFactoryInterface;
 use Fusio\Engine\ParametersInterface;
 use MongoDB;
 use PSX\Http\Exception\BadRequestException;
+use PSX\Json\Parser;
 use PSX\Record\RecordInterface;
 
 /**
@@ -72,7 +73,7 @@ abstract class MongoAbstract extends ActionAbstract
         } elseif (is_array($body)) {
             return (object) $body;
         } elseif ($body instanceof RecordInterface) {
-            return json_decode(json_encode($body));
+            return Parser::decodeAsObject(Parser::encode($body));
         } else {
             throw new BadRequestException('Provided an invalid request body');
         }
