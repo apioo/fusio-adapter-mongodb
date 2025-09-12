@@ -71,7 +71,7 @@ class MongoUpdateOneTest extends MongoTestCase
         // check whether the entry was updated
         $row = $this->connection->selectCollection('app_news')->findOne(['_id' => $row['_id']]);
 
-        $actual = BSON\toJSON(BSON\fromPHP($row));
+        $actual = $row;
         $expect = <<<JSON
 {
     "_id": {

@@ -70,7 +70,7 @@ class MongoInsertOneTest extends MongoTestCase
         $this->assertEquals($result, $response->getBody());
 
         // check whether the entry was inserted
-        $actual = BSON\toJSON(BSON\fromPHP($row));
+        $actual = $row;
         $expect = <<<JSON
 {
     "_id": {
