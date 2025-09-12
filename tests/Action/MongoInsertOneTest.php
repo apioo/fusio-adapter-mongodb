@@ -25,6 +25,7 @@ use Fusio\Adapter\Mongodb\Action\MongoInsertOne;
 use Fusio\Adapter\Mongodb\Tests\MongoTestCase;
 use MongoDB\BSON;
 use PSX\Http\Environment\HttpResponseInterface;
+use PSX\Json\Parser;
 use PSX\Record\Record;
 
 /**
@@ -70,7 +71,7 @@ class MongoInsertOneTest extends MongoTestCase
         $this->assertEquals($result, $response->getBody());
 
         // check whether the entry was inserted
-        $actual = $row;
+        $actual = Parser::encode($row);
         $expect = <<<JSON
 {
     "_id": {

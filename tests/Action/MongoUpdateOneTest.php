@@ -25,6 +25,7 @@ use Fusio\Adapter\Mongodb\Action\MongoUpdateOne;
 use Fusio\Adapter\Mongodb\Tests\MongoTestCase;
 use MongoDB\BSON;
 use PSX\Http\Environment\HttpResponseInterface;
+use PSX\Json\Parser;
 use PSX\Record\Record;
 
 /**
@@ -71,7 +72,7 @@ class MongoUpdateOneTest extends MongoTestCase
         // check whether the entry was updated
         $row = $this->connection->selectCollection('app_news')->findOne(['_id' => $row['_id']]);
 
-        $actual = $row;
+        $actual = Parser::encode($row);
         $expect = <<<JSON
 {
     "_id": {
