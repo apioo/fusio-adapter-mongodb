@@ -37,7 +37,7 @@ use PSX\Record\Record;
  */
 class MongoInsertOneTest extends MongoTestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $parameters = $this->getParameters([
             'connection' => 1,
@@ -57,7 +57,9 @@ class MongoInsertOneTest extends MongoTestCase
         $action   = $this->getActionFactory()->factory(MongoInsertOne::class);
         $response = $action->handle($this->getRequest('POST', [], [], [], $body), $parameters, $this->getContext());
 
-        $row = $this->connection->selectCollection('app_news')->findOne([], ['sort' => ['$natural' => -1], 'limit' => 1]);
+        $row = $this->getConnection()->selectCollection('app_news')->findOne([], ['sort' => ['$natural' => -1], 'limit' => 1]);
+
+        $this->assertIsArray($row);
 
         $result = [
             'success' => true,

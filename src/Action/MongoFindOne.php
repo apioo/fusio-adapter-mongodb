@@ -21,6 +21,7 @@
 
 namespace Fusio\Adapter\Mongodb\Action;
 
+use ArrayAccess;
 use Fusio\Engine\ContextInterface;
 use Fusio\Engine\ParametersInterface;
 use Fusio\Engine\RequestInterface;
@@ -55,7 +56,7 @@ class MongoFindOne extends MongoAbstract
         }
 
         // transform the mongodb id to a string
-        if (isset($row['_id'])) {
+        if ((is_array($row) || $row instanceof ArrayAccess) && isset($row['_id'])) {
             $row['_id'] = (string) $row['_id'];
         }
 

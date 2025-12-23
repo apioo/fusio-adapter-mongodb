@@ -34,9 +34,11 @@ use PSX\Http\Environment\HttpResponseInterface;
  */
 class MongoDeleteOneTest extends MongoTestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
-        $row = $this->connection->selectCollection('app_news')->findOne([], ['sort' => ['$natural' => 1]]);
+        $row = $this->getConnection()->selectCollection('app_news')->findOne([], ['sort' => ['$natural' => 1]]);
+
+        $this->assertIsArray($row);
 
         $parameters = $this->getParameters([
             'connection' => 1,
@@ -57,7 +59,7 @@ class MongoDeleteOneTest extends MongoTestCase
         $this->assertEquals($result, $response->getBody());
 
         // check whether the entry was deleted
-        $row = $this->connection->selectCollection('app_news')->findOne(['_id' => $row['_id']]);
+        $row = $this->getConnection()->selectCollection('app_news')->findOne(['_id' => $row['_id']]);
 
         $this->assertEmpty($row);
     }

@@ -37,9 +37,11 @@ use PSX\Record\Record;
  */
 class MongoUpdateOneTest extends MongoTestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
-        $row = $this->connection->selectCollection('app_news')->findOne([], ['sort' => ['$natural' => 1]]);
+        $row = $this->getConnection()->selectCollection('app_news')->findOne([], ['sort' => ['$natural' => 1]]);
+
+        $this->assertIsArray($row);
 
         $parameters = $this->getParameters([
             'connection' => 1,
@@ -70,7 +72,9 @@ class MongoUpdateOneTest extends MongoTestCase
         $this->assertEquals($result, $response->getBody());
 
         // check whether the entry was updated
-        $row = $this->connection->selectCollection('app_news')->findOne(['_id' => $row['_id']]);
+        $row = $this->getConnection()->selectCollection('app_news')->findOne(['_id' => $row['_id']]);
+
+        $this->assertIsArray($row);
 
         $actual = Parser::encode($row);
         $expect = <<<JSON

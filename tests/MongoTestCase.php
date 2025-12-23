@@ -21,10 +21,12 @@
 
 namespace Fusio\Adapter\Mongodb\Tests;
 
+use Exception;
 use Fusio\Adapter\Mongodb\Adapter;
 use Fusio\Adapter\Mongodb\Connection\MongoDB;
 use Fusio\Engine\Model\Connection;
 use Fusio\Engine\Parameters;
+use Fusio\Engine\Repository\ConnectionMemory;
 use Fusio\Engine\Test\CallbackConnection;
 use Fusio\Engine\Test\EngineTestCaseTrait;
 use MongoDB\Database;
@@ -55,7 +57,9 @@ abstract class MongoTestCase extends TestCase
             },
         ]);
 
-        $this->getConnectionRepository()->add($connection);
+        /** @var ConnectionMemory $repository */
+        $repository = $this->getConnectionRepository();
+        $repository->add($connection);
     }
 
     protected function tearDown(): void
@@ -94,11 +98,23 @@ abstract class MongoTestCase extends TestCase
             }
 
             return $connection;
-        } catch (\Exception $e) {
+        } catch (Exception) {
             $this->markTestSkipped('MongoDB connection not available');
         }
     }
-    
+
+    public function getConnection(): Database
+    {
+        if (!$this->connection instanceof Database) {
+            $this->markTestSkipped('MongoDB connection not available');
+        }
+
+        return $this->connection;
+    }
+
+    /**
+     * @return array<\stdClass>
+     */
     protected function getFixtures(): array
     {
         $result = [];

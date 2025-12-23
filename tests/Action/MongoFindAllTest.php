@@ -24,6 +24,7 @@ namespace Fusio\Adapter\Mongodb\Tests\Action;
 use Fusio\Adapter\Mongodb\Action\MongoFindAll;
 use Fusio\Adapter\Mongodb\Tests\MongoTestCase;
 use PSX\Http\Environment\HttpResponseInterface;
+use PSX\Json\Parser;
 
 /**
  * MongoFindAllTest
@@ -34,7 +35,7 @@ use PSX\Http\Environment\HttpResponseInterface;
  */
 class MongoFindAllTest extends MongoTestCase
 {
-    public function testHandle()
+    public function testHandle(): void
     {
         $parameters = $this->getParameters([
             'connection' => 1,
@@ -44,14 +45,14 @@ class MongoFindAllTest extends MongoTestCase
         $action   = $this->getActionFactory()->factory(MongoFindAll::class);
         $response = $action->handle($this->getRequest(), $parameters, $this->getContext());
 
-        $rows = $this->connection->selectCollection('app_news')->find();
+        $rows = $this->getConnection()->selectCollection('app_news')->find();
         $ids  = [];
         foreach ($rows as $row) {
-            $ids[] = $row->_id;
+            $ids[] = $row->_id ?? null;
         }
 
         $data   = $response->getBody();
-        $actual = json_encode($data, JSON_PRETTY_PRINT);
+        $actual = Parser::encode($data, JSON_PRETTY_PRINT);
         $expect = <<<JSON
 {
     "totalResults": 2,

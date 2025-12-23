@@ -23,14 +23,12 @@ namespace Fusio\Adapter\Mongodb\Tests\Connection;
 
 use Fusio\Adapter\Mongodb\Connection\MongoDB;
 use Fusio\Adapter\Mongodb\Tests\MongoTestCase;
-use Fusio\Engine\Connection\PingableInterface;
+use Fusio\Engine\ConfigurableInterface;
 use Fusio\Engine\Form\Builder;
 use Fusio\Engine\Form\Container;
 use Fusio\Engine\Form\Element\Input;
 use Fusio\Engine\Parameters;
-use Fusio\Engine\Test\EngineTestCaseTrait;
 use MongoDB\Database;
-use PHPUnit\Framework\TestCase;
 
 /**
  * MongoDBTest
@@ -41,7 +39,7 @@ use PHPUnit\Framework\TestCase;
  */
 class MongoDBTest extends MongoTestCase
 {
-    public function testGetConnection()
+    public function testGetConnection(): void
     {
         /** @var MongoDB $connectionFactory */
         $connectionFactory = $this->getConnectionFactory()->factory(MongoDB::class);
@@ -57,11 +55,13 @@ class MongoDBTest extends MongoTestCase
         $this->assertInstanceOf(Database::class, $connection);
     }
 
-    public function testConfigure()
+    public function testConfigure(): void
     {
         $connection = $this->getConnectionFactory()->factory(MongoDB::class);
         $builder    = new Builder();
         $factory    = $this->getFormElementFactory();
+
+        $this->assertInstanceOf(ConfigurableInterface::class, $connection);
 
         $connection->configure($builder, $factory);
 
@@ -74,7 +74,7 @@ class MongoDBTest extends MongoTestCase
         $this->assertInstanceOf(Input::class, $elements[2]);
     }
 
-    public function testPing()
+    public function testPing(): void
     {
         /** @var MongoDB $connectionFactory */
         $connectionFactory = $this->getConnectionFactory()->factory(MongoDB::class);
