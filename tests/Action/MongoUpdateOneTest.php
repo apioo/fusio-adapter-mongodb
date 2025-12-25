@@ -24,6 +24,7 @@ namespace Fusio\Adapter\Mongodb\Tests\Action;
 use Fusio\Adapter\Mongodb\Action\MongoUpdateOne;
 use Fusio\Adapter\Mongodb\Tests\MongoTestCase;
 use MongoDB\BSON;
+use MongoDB\Model\BSONDocument;
 use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Json\Parser;
 use PSX\Record\Record;
@@ -74,7 +75,7 @@ class MongoUpdateOneTest extends MongoTestCase
         // check whether the entry was updated
         $row = $this->getConnection()->selectCollection('app_news')->findOne(['_id' => $row['_id']]);
 
-        $this->assertIsArray($row);
+        $this->assertInstanceOf(BSONDocument::class, $row);
 
         $actual = Parser::encode($row);
         $expect = <<<JSON

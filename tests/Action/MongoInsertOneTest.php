@@ -24,6 +24,7 @@ namespace Fusio\Adapter\Mongodb\Tests\Action;
 use Fusio\Adapter\Mongodb\Action\MongoInsertOne;
 use Fusio\Adapter\Mongodb\Tests\MongoTestCase;
 use MongoDB\BSON;
+use MongoDB\Model\BSONDocument;
 use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Json\Parser;
 use PSX\Record\Record;
@@ -59,7 +60,7 @@ class MongoInsertOneTest extends MongoTestCase
 
         $row = $this->getConnection()->selectCollection('app_news')->findOne([], ['sort' => ['$natural' => -1], 'limit' => 1]);
 
-        $this->assertIsArray($row);
+        $this->assertInstanceOf(BSONDocument::class, $row);
 
         $result = [
             'success' => true,

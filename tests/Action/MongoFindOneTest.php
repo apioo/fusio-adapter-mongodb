@@ -23,6 +23,7 @@ namespace Fusio\Adapter\Mongodb\Tests\Action;
 
 use Fusio\Adapter\Mongodb\Action\MongoFindOne;
 use Fusio\Adapter\Mongodb\Tests\MongoTestCase;
+use MongoDB\Model\BSONDocument;
 use PSX\Http\Environment\HttpResponseInterface;
 use PSX\Json\Parser;
 use stdClass;
@@ -40,7 +41,7 @@ class MongoFindOneTest extends MongoTestCase
     {
         $row = $this->getConnection()->selectCollection('app_news')->findOne([], ['sort' => ['$natural' => 1]]);
 
-        $this->assertInstanceOf(stdClass::class, $row);
+        $this->assertInstanceOf(BSONDocument::class, $row);
 
         $parameters = $this->getParameters([
             'connection' => 1,
@@ -48,13 +49,13 @@ class MongoFindOneTest extends MongoTestCase
         ]);
 
         $action   = $this->getActionFactory()->factory(MongoFindOne::class);
-        $response = $action->handle($this->getRequest('GET', ['id' => $row->_id]), $parameters, $this->getContext());
+        $response = $action->handle($this->getRequest('GET', ['id' => $row['_id']]), $parameters, $this->getContext());
 
         $data   = $response->getBody();
         $actual = Parser::encode($data, JSON_PRETTY_PRINT);
         $expect = <<<JSON
 {
-    "_id": "{$row->_id}",
+    "_id": "{$row['_id']}",
     "title": "foo",
     "content": "bar",
     "user": {
